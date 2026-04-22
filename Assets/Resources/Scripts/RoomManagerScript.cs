@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class RoomManagerScript : MonoBehaviour
 {
-    [Header("Configuració de Sala")]
+    [Header("ConfiguraciÃ³ de Sala")]
     public string nomDeLaSala = "Sala 1";
     public Transform puntDeSpawn;
     public Transform puntDeCamara;
 
     [Header("Control de Portes")]
-    public GameObject objectePorta; // L'objecte que bloqueja la sortida
+    // ARA Ã‰S UNA LLISTA
+    public GameObject[] portesDeLaSala; 
     public bool tancarEnEntrar = true;
 
     [Header("Objectes Activables")]
@@ -22,11 +23,12 @@ public class RoomManagerScript : MonoBehaviour
     {
         camaraPrincipal = Camera.main;
         
-        // Al principi del joc, la porta hauria d'estar oberta (desactivada)
-        // o tancada segons com dissenyis el nivell.
-        if (objectePorta != null && tancarEnEntrar) 
+        if (portesDeLaSala != null && tancarEnEntrar) 
         {
-            objectePorta.SetActive(false); 
+            foreach (GameObject porta in portesDeLaSala)
+            {
+                if (porta != null) porta.SetActive(false); 
+            }
         }
     }
 
@@ -34,7 +36,6 @@ public class RoomManagerScript : MonoBehaviour
     {
         if (salaCompletada) return;
 
-        // Només comprovem si s'ha completat si el jugador ja és dins
         if (jugadorDins && EstanTotsAgafats())
         {
             CompletarSala();
@@ -47,20 +48,43 @@ public class RoomManagerScript : MonoBehaviour
         {
             jugadorDins = true;
 
-            // 1. Posem la càmera al seu lloc
+            // CÃ mera
             if (puntDeCamara != null)
                 camaraPrincipal.transform.position = new Vector3(puntDeCamara.position.x, puntDeCamara.position.y, -10f);
 
-            // 2. Actualitzem el Respawn
+            // ACTUALITZEM LA SALA ACTUAL I EL CHECKPOINT
             PlayerRespawnScript respawnScript = other.GetComponent<PlayerRespawnScript>();
-            if (respawnScript != null && puntDeSpawn != null)
-                respawnScript.SetNewCheckpoint(puntDeSpawn.position);
-
-            // 3. BLOQUEJEM LA SALA
-            if (objectePorta != null && tancarEnEntrar && !salaCompletada)
+            if (respawnScript != null)
             {
-                objectePorta.SetActive(true);
-                Debug.Log("Porta tancada! Completa la sala per sortir.");
+                respawnScript.salaActual = this; // AquÃ­ Ã©s on donava l'error
+                if (puntDeSpawn != null) respawnScript.SetNewCheckpoint(puntDeSpawn.position);
+            }
+
+            // Tancamos les portes
+            if (portesDeLaSala != null && tancarEnEntrar && !salaCompletada)
+            {
+                foreach (GameObject porta in portesDeLaSala)
+                {
+                    if (porta != null) porta.SetActive(true);
+                }
+            }
+        }
+    }
+
+    public void ReiniciarObjectes()
+    {
+        salaCompletada = false;
+        foreach (GameObject obj in objectesDeLaSala)
+        {
+            if (obj != null) obj.SetActive(true);
+        }
+        
+        // Opcional: tornar a tancar portes si havien quedat obertes
+        if (portesDeLaSala != null && tancarEnEntrar)
+        {
+            foreach (GameObject porta in portesDeLaSala)
+            {
+                if (porta != null) porta.SetActive(true);
             }
         }
     }
@@ -68,26 +92,22 @@ public class RoomManagerScript : MonoBehaviour
     private void CompletarSala()
     {
         salaCompletada = true;
-        Debug.Log("<color=green>SALA COMPLETADA: </color>" + nomDeLaSala);
-
-        // OBRIM LA PORTA
-        if (objectePorta != null)
+        if (portesDeLaSala != null)
         {
-            objectePorta.SetActive(false);
-            Debug.Log("Porta oberta! Pots continuar.");
+            foreach (GameObject porta in portesDeLaSala)
+            {
+                if (porta != null) porta.SetActive(false);
+            }
         }
     }
 
     bool EstanTotsAgafats()
     {
         if (objectesDeLaSala.Length == 0) return true; 
-
         foreach (GameObject obj in objectesDeLaSala)
         {
             if (obj != null && obj.activeSelf) return false; 
         }
         return true;
     }
-    
-
 }

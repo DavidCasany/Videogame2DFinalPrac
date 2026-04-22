@@ -1,16 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections; // Necessari per utilitzar IEnumerator
 
 public class PlayerRespawnScript : MonoBehaviour
 {
+    [Header("ConfiguraciÃ³ Respawn")]
+    public float tempsEsperaRespawn = 0.5f;
+
+    // AQUESTA Ã‰S LA VARIABLE QUE FALTAVA (La posem HideInInspector perquÃ¨ s'omple sola i no cal veure-la)
+    [HideInInspector] public RoomManagerScript salaActual; 
 
     private Vector3 ultimCheckpoint;
     private Rigidbody2D rb;
     private bool estaMort = false;
-
-    [Header("Configuració Mort")]
-    public float tempsEsperaRespawn = 0.5f;
 
     void Start()
     {
@@ -20,29 +21,34 @@ public class PlayerRespawnScript : MonoBehaviour
 
     void Update()
     {
-        if (estaMort) return; // Si estem en el procés de mort, no fem res
+        if (estaMort) return; // Si estÃ  morint, ignorem els inputs
 
+        // Reinici manual rÃ pid
         if (Input.GetKeyDown(KeyCode.R))
         {
             TornarAlCheckpointImmediat();
         }
     }
 
+    // Aquesta funciÃ³ la crida la sala per guardar on hem de reaparÃ¨ixer
     public void SetNewCheckpoint(Vector3 posicio)
     {
         ultimCheckpoint = posicio;
     }
 
-    // Aquesta funció es dispara quan toquem un obstacle
+    // ----------------------------------------------------
+    // DETECCIÃ“ D'OBSTACLES (Mort)
+    // ----------------------------------------------------
+
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Assegura't que les punxes / foc tinguin el Tag "Obstacle"
         if (other.CompareTag("Obstacle") && !estaMort)
         {
             StartCoroutine(ProcesMort());
         }
     }
 
-    // També per si l'obstacle no és Trigger (col·lisió física)
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Obstacle") && !estaMort)
@@ -51,39 +57,49 @@ public class PlayerRespawnScript : MonoBehaviour
         }
     }
 
+    // ----------------------------------------------------
+    // PROCÃ‰S DE MORT I RESPAWN
+    // ----------------------------------------------------
+
     IEnumerator ProcesMort()
     {
         estaMort = true;
-        
-        // 1. Aturem el jugador i el fem invisible (opcional)
         rb.velocity = Vector2.zero;
-        rb.simulated = false; // Això fa que no caigui ni xocqui mentre espera
-        // GetComponent<SpriteRenderer>().enabled = false; // Si vols que desaparegui
+        rb.simulated = false; // Congelem el jugador per a que no caigui mÃ©s
 
-        Debug.Log("Has mort! Reapareixent en " + tempsEsperaRespawn + " segons...");
-
-        // 2. Esperem el temps que hagis posat a l'Inspector
+        // Esperem el temps marcat a l'inspector
         yield return new WaitForSeconds(tempsEsperaRespawn);
 
-        // 3. Tornem al lloc
+        // 1. REINICIEM LA SALA (Activa els Floppy Disks i tanca portes)
+        if (salaActual != null)
+        {
+            salaActual.ReiniciarObjectes();
+        }
+
+        // 2. Tornem al punt de control
         transform.position = ultimCheckpoint;
         
-        // 4. Resetegem l'estat
+        // 3. Descongelem el jugador
         rb.simulated = true;
-        // GetComponent<SpriteRenderer>().enabled = true;
         estaMort = false;
 
-        // Opcional: Si vols que al morir també recuperi la 'W' i els salts
+        // 4. Resetejem l'habilitat W i el doble salt
         GetComponent<PlayerControllerScript>().ResetSaltsIAbilitat();
     }
 
     public void TornarAlCheckpointImmediat()
     {
-        StopAllCoroutines(); // Per si morim i premem R a la vegada
+        StopAllCoroutines(); // Aturem la mort si havÃ­em tocat un obstacle
         estaMort = false;
         rb.simulated = true;
         transform.position = ultimCheckpoint;
         rb.velocity = Vector2.zero;
+        
+        if (salaActual != null)
+        {
+            salaActual.ReiniciarObjectes();
+        }
+
         GetComponent<PlayerControllerScript>().ResetSaltsIAbilitat();
     }
 }
