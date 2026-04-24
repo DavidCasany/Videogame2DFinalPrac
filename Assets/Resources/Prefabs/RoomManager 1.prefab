@@ -84,7 +84,7 @@ MonoBehaviour:
   nomDeLaSala: Sala 1
   puntDeSpawn: {fileID: 1479631450719243219}
   puntDeCamara: {fileID: 3888170575886162103}
-  objectePorta: {fileID: 0}
+  portesDeLaSala: []
   tancarEnEntrar: 1
   objectesDeLaSala:
   - {fileID: 8428955727867210080, guid: 339f46bc46e9c5b4e89866855ef6cc54, type: 3}
@@ -119,7 +119,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.20898247, y: -5.6798162}
