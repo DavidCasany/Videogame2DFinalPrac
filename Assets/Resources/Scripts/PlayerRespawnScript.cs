@@ -11,7 +11,7 @@ public class PlayerRespawnScript : MonoBehaviour
 
     private Vector3 ultimCheckpoint;
     private Rigidbody2D rb;
-    private bool estaMort = false;
+    public bool estaMort = false;
 
     void Start()
     {
@@ -73,7 +73,7 @@ public class PlayerRespawnScript : MonoBehaviour
         // 1. REINICIEM LA SALA (Activa els Floppy Disks i tanca portes)
         if (salaActual != null)
         {
-            salaActual.ReiniciarObjectes();
+            salaActual.ReiniciarSala();
         }
 
         // 2. Tornem al punt de control
@@ -97,7 +97,7 @@ public class PlayerRespawnScript : MonoBehaviour
         
         if (salaActual != null)
         {
-            salaActual.ReiniciarObjectes();
+            salaActual.ReiniciarSala();
         }
 
         GetComponent<PlayerControllerScript>().ResetSaltsIAbilitat();
