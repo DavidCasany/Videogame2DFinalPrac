@@ -6,8 +6,8 @@ public class PlayerRespawnScript : MonoBehaviour
     [Header("Configuració Respawn")]
     public float tempsEsperaRespawn = 0.5f;
 
-    // AQUESTA ÉS LA VARIABLE QUE FALTAVA (La posem HideInInspector perquè s'omple sola i no cal veure-la)
-    [HideInInspector] public RoomManagerScript salaActual; 
+    
+     public RoomManagerScript salaActual; 
 
     private Vector3 ultimCheckpoint;
     private Rigidbody2D rb;

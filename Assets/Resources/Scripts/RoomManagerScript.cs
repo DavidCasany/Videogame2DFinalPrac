@@ -8,23 +8,23 @@ public class RoomManagerScript : MonoBehaviour
     public Transform puntDeCamara;
 
     [Header("Portes i Sortides")]
-    public GameObject[] portesDeLaSala; 
+    public GameObject[] portesDeLaSala;
     public bool tancarEnEntrar = true;
 
     [Header("Objectes Activables")]
-    public GameObject[] objectesDeLaSala; 
-    
+    public GameObject[] objectesDeLaSala;
+
     // Variables d'estat
     private bool salaCompletada = false; // Només es fa true al SORTIR de la sala sa i estalvi
     private bool jugadorDins = false;
-    private bool portesObertesActualment = false; 
+    private bool portesObertesActualment = false;
 
     private Camera camaraPrincipal;
 
     void Start()
     {
         camaraPrincipal = Camera.main;
-        
+
         // Inicialment les portes estan obertes fins que el jugador hi entra
         SetPortesEstat(false);
     }
@@ -82,11 +82,11 @@ public class RoomManagerScript : MonoBehaviour
 
             // Busquem l'script del jugador per veure el seu estat
             PlayerRespawnScript respawnScript = other.GetComponent<PlayerRespawnScript>();
-            
+
             // SI ESTÀ MORT (per haver tocat punxes i quedar-se congelat), IGNOREM LA SORTIDA
             if (respawnScript != null && respawnScript.estaMort)
             {
-                return; 
+                return;
             }
 
             // Si està viu, ha sortit caminant per la porta. Verifiquem els objectes:
@@ -116,7 +116,7 @@ public class RoomManagerScript : MonoBehaviour
     public void ReiniciarSala()
     {
         // Si la sala ja s'havia guardat al sortir, no la toquem. Reapareixeràs aquí però tot seguirà obert.
-        if (salaCompletada) 
+        if (salaCompletada)
         {
             return;
         }
@@ -136,35 +136,50 @@ public class RoomManagerScript : MonoBehaviour
             SetPortesEstat(true);
             portesObertesActualment = false;
         }
-        
+
         Debug.Log("Sala " + nomDeLaSala + " reiniciada!");
     }
 
-    // Funció auxiliar per canviar totes les portes de cop
+    // --- MODIFICACIÓ: Funció auxiliar per canviar l'animació i col·lisions de les portes ---
     private void SetPortesEstat(bool estat)
     {
         if (portesDeLaSala != null)
         {
             foreach (GameObject porta in portesDeLaSala)
             {
-                if (porta != null) porta.SetActive(estat);
+                if (porta != null)
+                {
+                    // 1. Canviem l'estat de l'animador
+                    Animator ar = porta.GetComponent<Animator>();
+                    if (ar != null)
+                    {
+                        ar.SetBool("BarrierState", estat);
+                    }
+
+                    // 2. Activem/Desactivem el collider per permetre o bloquejar el pas
+                    Collider2D col = porta.GetComponent<Collider2D>();
+                    if (col != null)
+                    {
+                        col.enabled = estat;
+                    }
+                }
             }
         }
     }
 
     bool EstanTotsAgafats()
     {
-        if (objectesDeLaSala == null || objectesDeLaSala.Length == 0) return true; 
+        if (objectesDeLaSala == null || objectesDeLaSala.Length == 0) return true;
 
         foreach (GameObject obj in objectesDeLaSala)
         {
-            if (obj != null && obj.activeSelf) return false; 
+            if (obj != null && obj.activeSelf) return false;
         }
         return true;
     }
 
     // Permet al Game Manager llegir si la sala està completada
-    public bool GetSalaCompletada() 
+    public bool GetSalaCompletada()
     {
         return salaCompletada;
     }

@@ -23,6 +23,11 @@ public class PlayerControllerScript : MonoBehaviour
     public GameObject flexaPare;
     public float forçaLlançament = 25f;
     public float duradaApuntat = 1f;
+    
+    // CORRECCIÓ ANIMACIÓ DASH: Afegim variables per allargar l'animació
+    public float duradaAnimacioDash = 0.4f; 
+    private float dashAnimTimer = 0f;
+
     private float apuntatTimer;
     private bool estaApuntant = false;
     private bool habilitatUsadaAire = false;
@@ -43,17 +48,22 @@ public class PlayerControllerScript : MonoBehaviour
     // Internes
     private Rigidbody2D rb;
     private Camera cam;
+    private Animator ar;
     private Vector2 moveInput;
     private bool isGrounded;
     private bool isTouchingWall;
     private bool isWallSliding;
-    private bool facingRight = false;
+    private bool facingRight = true; 
     private float currentSpeed;
+    
+    private bool jumpRequested = false; 
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
+        ar = GetComponent<Animator>();
+
         rb.gravityScale = 3.5f;
         wallDetachTimer = timeToDetach;
 
@@ -67,6 +77,12 @@ public class PlayerControllerScript : MonoBehaviour
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
         isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, checkRadius, wallLayer);
+
+        // CORRECCIÓ ANIMACIÓ DASH: Reduïm el temps del dash extra
+        if (dashAnimTimer > 0)
+        {
+            dashAnimTimer -= Time.deltaTime;
+        }
 
         if (isGrounded)
         {
@@ -82,21 +98,30 @@ public class PlayerControllerScript : MonoBehaviour
         if (estaApuntant)
         {
             ActualitzarApuntat();
-            return;
         }
-
-        HandleWallLogic();
-
-        if (!isWallSliding || isGrounded)
+        else
         {
-            if (moveInput.x > 0 && !facingRight) Flip();
-            else if (moveInput.x < 0 && facingRight) Flip();
+            HandleWallLogic();
+
+            // CORRECCIÓ ANIMACIÓ DASH: Tallem l'animació de vol si toquem terra o paret
+            if (isGrounded || isWallSliding)
+            {
+                dashAnimTimer = 0f;
+            }
+
+            if (!isWallSliding || isGrounded)
+            {
+                if (moveInput.x > 0 && !facingRight) Flip();
+                else if (moveInput.x < 0 && facingRight) Flip();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                jumpRequested = true;
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            HandleJump();
-        }
+        ActualitzarAnimacions();
     }
 
     void FixedUpdate()
@@ -104,12 +129,44 @@ public class PlayerControllerScript : MonoBehaviour
         if (estaApuntant)
         {
             rb.velocity = Vector2.zero;
+            jumpRequested = false; 
             return;
         }
 
         if (isGrounded) ApplyGroundMovement();
         else if (isWallSliding) ApplyWallMovement();
         else ApplyAirMovement();
+
+        if (jumpRequested)
+        {
+            HandleJump();
+            jumpRequested = false; 
+        }
+    }
+
+    private void ActualitzarAnimacions()
+    {
+        // CORRECCIÓ ANIMACIÓ DASH: Ara comprovem també el dashAnimTimer
+        if (estaApuntant || dashAnimTimer > 0)
+        {
+            ar.SetInteger("State", 4);
+        }
+        else if (isWallSliding)
+        {
+            ar.SetInteger("State", 3);
+        }
+        else if (!isGrounded)
+        {
+            ar.SetInteger("State", 2);
+        }
+        else if (Mathf.Abs(moveInput.x) > 0)
+        {
+            ar.SetInteger("State", 1);
+        }
+        else
+        {
+            ar.SetInteger("State", 0);
+        }
     }
 
     // --- MÈTODES DE L'HABILITAT W ---
@@ -119,6 +176,7 @@ public class PlayerControllerScript : MonoBehaviour
         estaApuntant = true;
         habilitatUsadaAire = true;
         apuntatTimer = duradaApuntat;
+        dashAnimTimer = 0f; // Assegurem que no hi hagi temps residual
 
         Time.timeScale = 0.1f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
@@ -130,23 +188,16 @@ public class PlayerControllerScript : MonoBehaviour
     {
         apuntatTimer -= Time.unscaledDeltaTime;
 
-        // 1. Obtenir direcció normalitzada (sempre força constant)
         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
         Vector2 direccio = ((Vector2)mousePos - (Vector2)transform.position).normalized;
 
-        // 2. Calcular l'angle al món
         float angle = Mathf.Atan2(direccio.y, direccio.x) * Mathf.Rad2Deg;
 
         if (flexaPare != null)
         {
-            // SOLUCIÓ FINAL PER AL FLIP:
-            // Usem .SetPositionAndRotation o .rotation directament per sobreescriure la rotació heretada del pare.
-            // Si la fletxa apunta al revés, canvia "angle" per "angle + 180f"
-            flexaPare.transform.rotation = Quaternion.Euler(0, 0, angle +180f);
+            flexaPare.transform.rotation = Quaternion.Euler(0, 0, angle + 180f);
 
-            // Si el personatge té localScale.x negatiu, Unity inverteix l'eix visual.
-            // Per corregir-ho i que la fletxa no es vegi del revés (mirall), forcem el localScale del fill
             Vector3 fletxaScale = flexaPare.transform.localScale;
             fletxaScale.x = transform.localScale.x > 0 ? 1 : -1;
             fletxaScale.y = transform.localScale.x > 0 ? 1 : -1;
@@ -169,9 +220,13 @@ public class PlayerControllerScript : MonoBehaviour
 
         rb.velocity = dir * forçaLlançament;
         currentSpeed = rb.velocity.x;
+
+        // CORRECCIÓ ANIMACIÓ DASH: Donem inici al temps extra per a l'animació
+        dashAnimTimer = duradaAnimacioDash;
     }
 
     // --- MÈTODES DE MOVIMENT ---
+    // (Aquests mètodes no han canviat)
 
     private void ApplyGroundMovement()
     {
@@ -227,7 +282,7 @@ public class PlayerControllerScript : MonoBehaviour
             {
                 float dirX = paretALaDreta ? -1 : 1;
                 rb.velocity = new Vector2(wallJumpNormal.x * dirX, wallJumpNormal.y);
-                Flip();
+                Flip(); 
             }
             else rb.velocity = new Vector2(0, wallJumpVertical.y);
 
@@ -254,8 +309,8 @@ public class PlayerControllerScript : MonoBehaviour
     {
         jumpsLeft = maxJumps;
         habilitatUsadaAire = false;
-        // Opcionalment pots aturar qualsevol "Dash/Apuntat" si estava en curs
         estaApuntant = false;
+        dashAnimTimer = 0f; // També el resetegem aquí per si de cas
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
         if (flexaPare != null) flexaPare.SetActive(false);
