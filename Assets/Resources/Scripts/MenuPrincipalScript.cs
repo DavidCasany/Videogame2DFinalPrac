@@ -7,14 +7,14 @@ public class MenuPrincipalScript : MonoBehaviour
     public void StartNewGame()
     {
         // Carrega l'escena del joc (la número 2 als Build Settings)
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
     }
 
     // Funció per al botó "Options"
     public void OpenOptions()
     {
         // Carrega l'escena de les opcions (la número 1 als Build Settings)
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(3);
     }
 
     // Funció per al botó "Quit"

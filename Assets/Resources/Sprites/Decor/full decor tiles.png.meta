@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d556b6bfe21ba3c4faf4e712c04b3cbb
+guid: aeddc1279a4dbe54c8b4c6c5cba27060
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Proyecto nuevo_0
+      name: full decor tiles_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 3
-        width: 198
-        height: 291
+        x: 9
+        y: 64
+        width: 15
+        height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,20 +111,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 545b4f778a138f24a984dd542e5248c5
-      internalID: 1004543265
+      spriteID: 790fa54c00dc2c245be7a4883688a90c
+      internalID: -362686671
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Proyecto nuevo_1
+      name: full decor tiles_1
       rect:
         serializedVersion: 2
-        x: 230
-        y: 3
-        width: 199
-        height: 291
+        x: 35
+        y: 64
+        width: 26
+        height: 17
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,20 +132,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 914819af84e0dcd4c8ce5bc0e1c138d5
-      internalID: 603594623
+      spriteID: ab1ee9c4e9e18e64c9696e18e47cd9bb
+      internalID: 977312174
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Proyecto nuevo_2
+      name: full decor tiles_2
       rect:
         serializedVersion: 2
-        x: 460
-        y: 2
-        width: 200
-        height: 292
+        x: 2
+        y: 32
+        width: 29
+        height: 22
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,20 +153,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0bdf998a5bcd0364d9b8e580808e6900
-      internalID: 1141830884
+      spriteID: 912811b6474bbb54f82d8f02450a74ad
+      internalID: -271717602
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Proyecto nuevo_3
+      name: full decor tiles_3
       rect:
         serializedVersion: 2
-        x: 688
-        y: 3
-        width: 198
-        height: 291
+        x: 36
+        y: 32
+        width: 24
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,8 +174,92 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b61f5ba0bca3cb948bb2c90c1f4d6e04
-      internalID: -1939173491
+      spriteID: 49b1b4ea6c5b5f544b611b719d7bff2f
+      internalID: 1068733903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: full decor tiles_4
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 32
+        width: 28
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be5bcf332789bdb4cbf65b0eae515cb9
+      internalID: -832007957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: full decor tiles_5
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 0
+        width: 20
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 963d9a99a3f4fb14ebb6683373fa939d
+      internalID: -227523378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: full decor tiles_6
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 31
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 901d7ecb14260dc439eacd38927fb052
+      internalID: 1096126434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: full decor tiles_7
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 0
+        width: 29
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acd59a70c2effb043a04c49ebae7678f
+      internalID: 655122074
       vertices: []
       indices: 
       edges: []
@@ -191,10 +275,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Proyecto nuevo_0: 1004543265
-      Proyecto nuevo_1: 603594623
-      Proyecto nuevo_2: 1141830884
-      Proyecto nuevo_3: -1939173491
+      full decor tiles_0: -362686671
+      full decor tiles_1: 977312174
+      full decor tiles_2: -271717602
+      full decor tiles_3: 1068733903
+      full decor tiles_4: -832007957
+      full decor tiles_5: -227523378
+      full decor tiles_6: 1096126434
+      full decor tiles_7: 655122074
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
