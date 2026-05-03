@@ -23,10 +23,13 @@ public class PlayerControllerScript : MonoBehaviour
     public GameObject flexaPare;
     public float forçaLlançament = 25f;
     public float duradaApuntat = 1f;
-    
-    // CORRECCIÓ ANIMACIÓ DASH: Afegim variables per allargar l'animació
-    public float duradaAnimacioDash = 0.4f; 
+
+    public float duradaAnimacioDash = 0.4f;
     private float dashAnimTimer = 0f;
+
+    public float duradaAnimacioLanding = 0.15f;
+    private float landingAnimTimer = 0f;
+    private bool wasGrounded = true;
 
     private float apuntatTimer;
     private bool estaApuntant = false;
@@ -53,10 +56,13 @@ public class PlayerControllerScript : MonoBehaviour
     private bool isGrounded;
     private bool isTouchingWall;
     private bool isWallSliding;
-    private bool facingRight = true; 
+    private bool facingRight = true;
     private float currentSpeed;
-    
-    private bool jumpRequested = false; 
+
+    private bool jumpRequested = false;
+
+    // NOU CONTROLS: Variable per saber si els controls estan actius
+    private bool controlsActius = true;
 
     void Start()
     {
@@ -72,16 +78,32 @@ public class PlayerControllerScript : MonoBehaviour
 
     void Update()
     {
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
+        // NOU CONTROLS: Només llegim el teclat si els controls estan actius
+        if (controlsActius)
+        {
+            moveInput.x = Input.GetAxisRaw("Horizontal");
+            moveInput.y = Input.GetAxisRaw("Vertical");
+
+            if (Input.GetKeyDown(KeyCode.W) && !isGrounded && !habilitatUsadaAire && !estaApuntant)
+            {
+                IniciarApuntat();
+            }
+        }
+        else
+        {
+            // Si estan desactivats, forcem que no hi hagi input de moviment
+            moveInput = Vector2.zero;
+        }
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
         isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, checkRadius, wallLayer);
 
-        // CORRECCIÓ ANIMACIÓ DASH: Reduïm el temps del dash extra
-        if (dashAnimTimer > 0)
+        if (dashAnimTimer > 0) dashAnimTimer -= Time.deltaTime;
+        if (landingAnimTimer > 0) landingAnimTimer -= Time.deltaTime;
+
+        if (!wasGrounded && isGrounded)
         {
-            dashAnimTimer -= Time.deltaTime;
+            landingAnimTimer = duradaAnimacioLanding;
         }
 
         if (isGrounded)
@@ -90,20 +112,18 @@ public class PlayerControllerScript : MonoBehaviour
             habilitatUsadaAire = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.W) && !isGrounded && !habilitatUsadaAire && !estaApuntant)
-        {
-            IniciarApuntat();
-        }
-
         if (estaApuntant)
         {
-            ActualitzarApuntat();
+            // NOU CONTROLS: Només deixem moure la fletxa si els controls estan actius
+            if (controlsActius)
+            {
+                ActualitzarApuntat();
+            }
         }
         else
         {
             HandleWallLogic();
 
-            // CORRECCIÓ ANIMACIÓ DASH: Tallem l'animació de vol si toquem terra o paret
             if (isGrounded || isWallSliding)
             {
                 dashAnimTimer = 0f;
@@ -115,13 +135,16 @@ public class PlayerControllerScript : MonoBehaviour
                 else if (moveInput.x < 0 && facingRight) Flip();
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            // NOU CONTROLS: Condicionem el salt a tenir els controls actius
+            if (controlsActius && Input.GetKeyDown(KeyCode.Space))
             {
                 jumpRequested = true;
             }
         }
 
         ActualitzarAnimacions();
+
+        wasGrounded = isGrounded;
     }
 
     void FixedUpdate()
@@ -129,7 +152,7 @@ public class PlayerControllerScript : MonoBehaviour
         if (estaApuntant)
         {
             rb.velocity = Vector2.zero;
-            jumpRequested = false; 
+            jumpRequested = false;
             return;
         }
 
@@ -140,13 +163,12 @@ public class PlayerControllerScript : MonoBehaviour
         if (jumpRequested)
         {
             HandleJump();
-            jumpRequested = false; 
+            jumpRequested = false;
         }
     }
 
     private void ActualitzarAnimacions()
     {
-        // CORRECCIÓ ANIMACIÓ DASH: Ara comprovem també el dashAnimTimer
         if (estaApuntant || dashAnimTimer > 0)
         {
             ar.SetInteger("State", 4);
@@ -154,6 +176,10 @@ public class PlayerControllerScript : MonoBehaviour
         else if (isWallSliding)
         {
             ar.SetInteger("State", 3);
+        }
+        else if (landingAnimTimer > 0 && isGrounded)
+        {
+            ar.SetInteger("State", 5);
         }
         else if (!isGrounded)
         {
@@ -176,7 +202,7 @@ public class PlayerControllerScript : MonoBehaviour
         estaApuntant = true;
         habilitatUsadaAire = true;
         apuntatTimer = duradaApuntat;
-        dashAnimTimer = 0f; // Assegurem que no hi hagi temps residual
+        dashAnimTimer = 0f;
 
         Time.timeScale = 0.1f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
@@ -221,12 +247,10 @@ public class PlayerControllerScript : MonoBehaviour
         rb.velocity = dir * forçaLlançament;
         currentSpeed = rb.velocity.x;
 
-        // CORRECCIÓ ANIMACIÓ DASH: Donem inici al temps extra per a l'animació
         dashAnimTimer = duradaAnimacioDash;
     }
 
     // --- MÈTODES DE MOVIMENT ---
-    // (Aquests mètodes no han canviat)
 
     private void ApplyGroundMovement()
     {
@@ -282,7 +306,7 @@ public class PlayerControllerScript : MonoBehaviour
             {
                 float dirX = paretALaDreta ? -1 : 1;
                 rb.velocity = new Vector2(wallJumpNormal.x * dirX, wallJumpNormal.y);
-                Flip(); 
+                Flip();
             }
             else rb.velocity = new Vector2(0, wallJumpVertical.y);
 
@@ -310,9 +334,33 @@ public class PlayerControllerScript : MonoBehaviour
         jumpsLeft = maxJumps;
         habilitatUsadaAire = false;
         estaApuntant = false;
-        dashAnimTimer = 0f; // També el resetegem aquí per si de cas
+        dashAnimTimer = 0f;
+        landingAnimTimer = 0f;
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
         if (flexaPare != null) flexaPare.SetActive(false);
     }
-}
+
+    // --- NOU CONTROLS: FUNCIONS PÚBLIQUES ---
+
+    public void ActivarControls()
+    {
+        controlsActius = true;
+    }
+
+    public void DesactivarControls()
+    {
+        controlsActius = false;
+        moveInput = Vector2.zero; // Aturem l'intent de moviment
+        jumpRequested = false;    // Cancel·lem salts pendents
+
+        // Si desactives els controls mentre el jugador estava apuntant (temps alentit), ho cancel·lem
+        if (estaApuntant)
+        {
+            estaApuntant = false;
+            Time.timeScale = 1f;
+            Time.fixedDeltaTime = 0.02f;
+            if (flexaPare != null) flexaPare.SetActive(false);
+        }
+    }
+} 
