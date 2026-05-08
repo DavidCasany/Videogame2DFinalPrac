@@ -5,24 +5,27 @@ using UnityEngine;
 public class PlataformaMobilScript : MonoBehaviour
 {
 
-    public Transform puntA;      // On comença
-    public Transform puntB;      // On va
-    public float velocitat = 3f; // Què tan ràpid es mou
+    public Transform puntA;      
+    public Transform puntB;      
+    public float velocitat = 3f; 
+    BoxCollider2D floor;
 
     private Vector3 proximObjectiu;
 
     void Start()
     {
-        // Comencem anant cap al punt B
+        BoxCollider2D[] colliders = GetComponents<BoxCollider2D>();
+        floor = colliders[0].isTrigger ? colliders[1] : colliders[0];
+        
         proximObjectiu = puntB.position;
     }
 
     void Update()
     {
-        // Movem la plataforma cap a l'objectiu
+        
         transform.position = Vector3.MoveTowards(transform.position, proximObjectiu, velocitat * Time.deltaTime);
 
-        // Si hem arribat molt a prop de l'objectiu, canviem de sentit
+        
         if (Vector3.Distance(transform.position, proximObjectiu) < 0.1f)
         {
             if (proximObjectiu == puntB.position)
@@ -36,7 +39,7 @@ public class PlataformaMobilScript : MonoBehaviour
         }
     }
 
-    // AQUESTA PART ÉS CRUCIAL: Fa que el jugador es mogui AMB la plataforma
+    // AQUESTA PART ï¿½S CRUCIAL: Fa que el jugador es mogui AMB la plataforma
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -52,6 +55,18 @@ public class PlataformaMobilScript : MonoBehaviour
         {
             // Quan salta o marxa, el treiem de "fill" de la plataforma
             collision.transform.SetParent(null);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetComponent<Rigidbody2D>().velocity.y>0.0f && collision.gameObject.CompareTag("Player"))
+        {
+            floor.enabled = false;
+        }
+        else
+        {
+            floor.enabled = true;
         }
     }
 

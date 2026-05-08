@@ -19,9 +19,9 @@ public class PlayerControllerScript : MonoBehaviour
     public float timeToDetach = 0.5f;
     private float wallDetachTimer;
 
-    [Header("Habilitat de Llançament (W)")]
+    [Header("Habilitat de Llanï¿½ament (W)")]
     public GameObject flexaPare;
-    public float forçaLlançament = 25f;
+    public float forÃ§aLlanÃ§ament = 25f;
     public float duradaApuntat = 1f;
 
     public float duradaAnimacioDash = 0.4f;
@@ -35,7 +35,7 @@ public class PlayerControllerScript : MonoBehaviour
     private bool estaApuntant = false;
     private bool habilitatUsadaAire = false;
 
-    [Header("Configuració Salt")]
+    [Header("Configuraciï¿½ Salt")]
     public float jumpForceY = 13f;
     public float jumpForceX = 4f;
     public int maxJumps = 2;
@@ -78,7 +78,7 @@ public class PlayerControllerScript : MonoBehaviour
 
     void Update()
     {
-        // NOU CONTROLS: Només llegim el teclat si els controls estan actius
+        // NOU CONTROLS: Nomï¿½s llegim el teclat si els controls estan actius
         if (controlsActius)
         {
             moveInput.x = Input.GetAxisRaw("Horizontal");
@@ -114,7 +114,7 @@ public class PlayerControllerScript : MonoBehaviour
 
         if (estaApuntant)
         {
-            // NOU CONTROLS: Només deixem moure la fletxa si els controls estan actius
+            // NOU CONTROLS: Nomï¿½s deixem moure la fletxa si els controls estan actius
             if (controlsActius)
             {
                 ActualitzarApuntat();
@@ -195,7 +195,7 @@ public class PlayerControllerScript : MonoBehaviour
         }
     }
 
-    // --- MÈTODES DE L'HABILITAT W ---
+    // --- Mï¿½TODES DE L'HABILITAT W ---
 
     void IniciarApuntat()
     {
@@ -232,11 +232,11 @@ public class PlayerControllerScript : MonoBehaviour
 
         if (apuntatTimer <= 0)
         {
-            ExecutarLlançament(direccio);
+            ExecutarLlanÃ§ament(direccio);
         }
     }
 
-    void ExecutarLlançament(Vector2 dir)
+    void ExecutarLlanÃ§ament(Vector2 dir)
     {
         estaApuntant = false;
         if (flexaPare != null) flexaPare.SetActive(false);
@@ -244,13 +244,13 @@ public class PlayerControllerScript : MonoBehaviour
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
 
-        rb.velocity = dir * forçaLlançament;
+        rb.velocity = dir * forÃ§aLlanÃ§ament;
         currentSpeed = rb.velocity.x;
 
         dashAnimTimer = duradaAnimacioDash;
     }
 
-    // --- MÈTODES DE MOVIMENT ---
+    // --- Mï¿½TODES DE MOVIMENT ---
 
     private void ApplyGroundMovement()
     {
@@ -341,7 +341,7 @@ public class PlayerControllerScript : MonoBehaviour
         if (flexaPare != null) flexaPare.SetActive(false);
     }
 
-    // --- NOU CONTROLS: FUNCIONS PÚBLIQUES ---
+    // --- NOU CONTROLS: FUNCIONS Pï¿½BLIQUES ---
 
     public void ActivarControls()
     {
@@ -352,9 +352,9 @@ public class PlayerControllerScript : MonoBehaviour
     {
         controlsActius = false;
         moveInput = Vector2.zero; // Aturem l'intent de moviment
-        jumpRequested = false;    // Cancel·lem salts pendents
+        jumpRequested = false;    // Cancelï¿½lem salts pendents
 
-        // Si desactives els controls mentre el jugador estava apuntant (temps alentit), ho cancel·lem
+        // Si desactives els controls mentre el jugador estava apuntant (temps alentit), ho cancelï¿½lem
         if (estaApuntant)
         {
             estaApuntant = false;
