@@ -1,4 +1,4 @@
-using System.Collections; // Necessari per a les corrutines
+using System.Collections;
 using UnityEngine;
 
 public class KamikazeScript : MonoBehaviour
@@ -22,21 +22,21 @@ public class KamikazeScript : MonoBehaviour
     public GameObject prefabExplosioInofensiva;
     public float forcaRebotJugador = 15f;
     [Tooltip("El temps que es mostra l'animació de rebre dany abans d'explotar visualment")]
-    public float tempsAnimacioDany = 0.3f; // NOU
+    public float tempsAnimacioDany = 0.3f;
 
     // Variables internes
     private Transform jugador;
     private Animator ar;
     private Rigidbody2D rb;
+    private Collider2D col; // NOU: Guardem el collider
     private Vector3 puntObjectiu;
     private Vector3 posicioInicial;
     private float temporitzadorEspera = 0f;
     private float temporitzadorAntiBloqueig = 0f;
     private float temporitzadorAtac = 0f;
     private bool mirantDreta = true;
-    private bool esMort = false; // NOU: Assegura que només mori un cop
+    private bool esMort = false;
 
-    // NOU: Hem afegit l'estat Danyat
     private enum EstatIA { Deambulant, Perseguint, Atacant, Danyat }
     private EstatIA estatActual;
 
@@ -44,6 +44,7 @@ public class KamikazeScript : MonoBehaviour
     {
         ar = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>(); // Inicialitzem el collider
         posicioInicial = transform.position;
 
         GameObject objJugador = GameObject.FindGameObjectWithTag("Player");
@@ -57,7 +58,6 @@ public class KamikazeScript : MonoBehaviour
 
     void Update()
     {
-        // 1. Si ja l'hem matat, que ignori qualsevol altra decisió d'IA
         if (esMort || estatActual == EstatIA.Danyat) return;
 
         if (jugador == null)
@@ -102,7 +102,7 @@ public class KamikazeScript : MonoBehaviour
         if (temporitzadorEspera > 0)
         {
             temporitzadorEspera -= Time.deltaTime;
-            rb.velocity = Vector2.zero; // MODIFICAT: S'atura completament
+            rb.velocity = Vector2.zero;
             CanviarAnimacio(0);
             return;
         }
@@ -128,8 +128,12 @@ public class KamikazeScript : MonoBehaviour
 
     private void ComportamentAtac()
     {
-        rb.velocity = Vector2.zero; // MODIFICAT: S'atura totalment en l'aire per fer el compte enrere
+        rb.velocity = Vector2.zero;
         CanviarAnimacio(2);
+
+        // NOU: Desactivem el collider instantàniament quan entra en mode compte enrere
+        if (col != null) col.enabled = false;
+
         temporitzadorAtac += Time.deltaTime;
 
         if (temporitzadorAtac >= tempsCompteEnrere)
@@ -140,7 +144,6 @@ public class KamikazeScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Si ja l'hem matat, ignorem nous xocs
         if (esMort || estatActual == EstatIA.Danyat) return;
 
         if (collision.gameObject.CompareTag("Player"))
@@ -149,44 +152,25 @@ public class KamikazeScript : MonoBehaviour
 
             if (playerScript != null)
             {
-                if (playerScript.estaFentDobleSalt)
-                {
-                    // MATEM L'ENEMIC
-                    esMort = true;
-                    estatActual = EstatIA.Danyat;
+                esMort = true;
+                estatActual = EstatIA.Danyat;
 
-                    // L'impuls al jugador (per rebotar)
-                    playerScript.AplicarRebotAlMatarEnemic(forcaRebotJugador);
-
-                    // Iniciem la corrutina de rebre dany
-                    StartCoroutine(ProcesMortEnemic());
-                }
-                else
-                {
-                    // Aquest text sortirà a la consola si hi xoques i no funciona
-                    Debug.Log("Has xocat, però l'script del jugador diu que NO estaves fent doble salt!");
-                }
+                playerScript.AplicarRebotAlMatarEnemic(forcaRebotJugador);
+                StartCoroutine(ProcesMortEnemic());
             }
         }
     }
 
-    // NOU: Procés de mort amb animació prèvia
     private IEnumerator ProcesMortEnemic()
     {
-        // 1. Aturem l'enemic perquè no empenyi més
         rb.velocity = Vector2.zero;
 
-        // 2. Desactivem el collider perquè el jugador no rebi xocs rars mentre l'enemic fa l'animació
-        Collider2D col = GetComponent<Collider2D>();
+        // Aquí també utilitzem el collider guardat per seguretat
         if (col != null) col.enabled = false;
 
-        // 3. Posem l'animació de rebre dany (State 3)
         CanviarAnimacio(3);
-
-        // 4. Esperem un instant perquè el jugador pugui gaudir de l'animació
         yield return new WaitForSeconds(tempsAnimacioDany);
 
-        // 5. Creem l'explosió inofensiva i destruïm el robot
         InstanciarIAutodestruir(prefabExplosioInofensiva);
     }
 
@@ -199,7 +183,6 @@ public class KamikazeScript : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // MODIFICAT: Ara utilitzem la velocitat de les físiques en lloc de teletransportar la posició
     private void MoureCapA(Vector3 desti, float velocitat)
     {
         Vector2 direccio = (desti - transform.position).normalized;
@@ -245,4 +228,4 @@ public class KamikazeScript : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, radiAtac);
     }
-}
+}}

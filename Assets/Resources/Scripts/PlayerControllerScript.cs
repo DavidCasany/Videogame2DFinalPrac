@@ -26,9 +26,6 @@ public class PlayerControllerScript : MonoBehaviour
     public float forçaLlançament = 25f;
     public float duradaApuntat = 1f;
 
-    [Header("Combat")]
-    public bool estaFentDobleSalt = false;
-
     [Header("Animacions Extres")]
     public float duradaAnimacioDash = 0.4f;
     private float dashAnimTimer = 0f;
@@ -115,18 +112,10 @@ public class PlayerControllerScript : MonoBehaviour
             landingAnimTimer = duradaAnimacioLanding;
         }
 
-        // --- MILLORA 2: RESET DEL DOBLE SALT CONTROLAT ---
         if (isGrounded)
         {
             jumpsLeft = maxJumps;
             habilitatUsadaAire = false;
-
-            // Si tocàvem terra i teníem el doble salt actiu, el desactivem i avisem
-            if (estaFentDobleSalt)
-            {
-                estaFentDobleSalt = false;
-                Debug.Log("Terra tocada (isGrounded = true) -> Doble salt DESACTIVAT.");
-            }
         }
 
         if (estaApuntant)
@@ -237,7 +226,6 @@ public class PlayerControllerScript : MonoBehaviour
         jumpsLeft = maxJumps;
         habilitatUsadaAire = false;
         estaApuntant = false;
-        estaFentDobleSalt = false; // Assegurem apagar el doble salt al fer reset
         dashAnimTimer = 0f;
         landingAnimTimer = 0f;
         Time.timeScale = 1f;
@@ -349,13 +337,6 @@ public class PlayerControllerScript : MonoBehaviour
 
         if (isGrounded || jumpsLeft > 0)
         {
-            // --- MILLORA 3: ACTIVACIÓ DEL DOBLE SALT I DEBUG ---
-            if (!isGrounded)
-            {
-                estaFentDobleSalt = true;
-                Debug.Log("DOBLE SALT ACTIVAT! Llest per trepitjar l'enemic.");
-            }
-
             jumpsLeft--;
             float boostX = moveInput.x * jumpForceX;
             rb.velocity = new Vector2(rb.velocity.x + boostX, jumpForceY);
@@ -373,7 +354,6 @@ public class PlayerControllerScript : MonoBehaviour
     public void AplicarRebotAlMatarEnemic(float forcaRebot)
     {
         rb.velocity = new Vector2(rb.velocity.x, forcaRebot);
-        estaFentDobleSalt = false;
         ResetSaltsIAbilitat();
     }
 }
