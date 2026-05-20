@@ -228,4 +228,4 @@ public class KamikazeScript : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, radiAtac);
     }
-}}
+}
