@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; // NOU: Necessari per al canvi d'escena
 
 public class FinalTutorialScript : MonoBehaviour
 {
@@ -7,23 +8,22 @@ public class FinalTutorialScript : MonoBehaviour
     public GameObject panelText;
 
     [Header("Monitor Interactiu")]
-    public Animator monitorAnimator; // NOU: Referència a l'animador del monitor
+    public Animator monitorAnimator;
 
-    [Header("Recompensa")]
+    [Header("Recompensa i Escena")]
     public GameObject consumiblePrefab;
+    public float yOffsetBateria = 2f; // Altura extra sobre el cap del jugador
+    public int indexEscenaSeguent = 3; // Escena número 3 segons Build Settings
 
     // Variables de control intern
     private bool jugadorAProp = false;
     private bool llegintDialeg = false;
+    private PlayerControllerScript playerScript; // Guardem la referència del jugador
 
-    // S'executa cada vegada que s'activa aquest objecte
     void OnEnable()
     {
-        // Ens assegurem que la icona es vegi i el text estigui amagat d'inici
         if (iconaInteraccio != null) iconaInteraccio.SetActive(true);
         if (panelText != null) panelText.SetActive(false);
-
-        // NOU: Ens assegurem que el monitor comenci amb la pantalla vermella (ScreenRed = true)
         if (monitorAnimator != null) monitorAnimator.SetBool("ScreenRed", true);
 
         llegintDialeg = false;
@@ -31,48 +31,60 @@ public class FinalTutorialScript : MonoBehaviour
 
     void Update()
     {
-        // 1. Detectar quan el jugador prem la tecla E per començar
+        // 1. Detectar quan el jugador prem la tecla E
         if (jugadorAProp && !llegintDialeg && Input.GetKeyDown(KeyCode.E))
         {
             llegintDialeg = true;
 
-            // Amaguem la icona i mostrem el panel
             if (iconaInteraccio != null) iconaInteraccio.SetActive(false);
             if (panelText != null) panelText.SetActive(true);
-
-            // NOU: Canviem l'estat del monitor a "no vermell" (verd/normal)
             if (monitorAnimator != null) monitorAnimator.SetBool("ScreenRed", false);
+
+            // NOU: Bloquegem els controls del jugador al començar el diàleg
+            if (playerScript != null)
+            {
+                playerScript.DesactivarControls();
+            }
         }
 
-        // 2. Comprovar si estem enmig d'un diàleg i el panell s'ha tancat sol
+        // 2. Comprovar quan el panell de text es tanca sol (perquè el text ha acabat)
         if (llegintDialeg && panelText != null && !panelText.activeSelf)
         {
-            // El DialegTextScript ha desactivat el panel, per tant el text ha acabat!
+            llegintDialeg = false; // Evitem que aquest bloc s'executi repetidament
 
-            // Spawnegem el consumible just en la posició d'aquest objecte
-            if (consumiblePrefab != null)
+            // NOU: Spawnegem la bateria sobre el jugador (mateixa X, Y + offset)
+            if (consumiblePrefab != null && playerScript != null)
             {
-                Instantiate(consumiblePrefab, transform.position, Quaternion.identity);
+                Vector3 spawnPos = new Vector3(
+                    playerScript.transform.position.x,
+                    playerScript.transform.position.y + yOffsetBateria,
+                    0
+                );
+                Instantiate(consumiblePrefab, spawnPos, Quaternion.identity);
             }
 
-            // NOU: Retornem l'animació del monitor al seu estat original
             if (monitorAnimator != null) monitorAnimator.SetBool("ScreenRed", true);
 
-            // Desactivem l'objecte FinalTutorial per completar-ho tot
-            gameObject.SetActive(false);
+            // NOU: Esperem 2 segons i canviem a l'escena 3
+            Invoke("FinalitzarEscenaTutorial", 2f);
         }
     }
 
-    // Gestionem quan el jugador entra al trigger
+    private void FinalitzarEscenaTutorial()
+    {
+        SceneManager.LoadScene(indexEscenaSeguent);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
             jugadorAProp = true;
+            // Obtenim la referència del script del jugador per poder moure'l o desactivar-lo
+            playerScript = collision.GetComponent<PlayerControllerScript>();
         }
     }
 
-    // Gestionem quan el jugador surt del trigger
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))

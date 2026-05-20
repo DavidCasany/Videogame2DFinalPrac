@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 29c7816eaeb08674faef22dfdb728f05
+guid: 3374f2ebf5469a44db8abfd663a0132a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 48
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Droid02Death_0
+      name: laser_deactivate_Mod_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,20 +111,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06c107139869a4c42a23f9b2c06b3304
-      internalID: -237357945
+      spriteID: 10a862ee380d5f94ea3f8379230d40fe
+      internalID: 1148225546
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Droid02Death_1
+      name: laser_deactivate_Mod_1
       rect:
         serializedVersion: 2
-        x: 48
+        x: 32
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,20 +132,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2cc414086cbb1714a8b18cefe5322b5b
-      internalID: 1463143152
+      spriteID: b73afb53d53d46547a85fe13c92d332b
+      internalID: 1022375973
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Droid02Death_2
+      name: laser_deactivate_Mod_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d22af6c55f4036429d2456504bf22e0
+      internalID: 1357425593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: laser_deactivate_Mod_3
       rect:
         serializedVersion: 2
         x: 96
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,20 +174,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0c440d47ff2aaa24db91cbabe0ae6837
-      internalID: 302830776
+      spriteID: d0b091e15f6d8414297759e7359e8ae2
+      internalID: -2117874955
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Droid02Death_3
+      name: laser_deactivate_Mod_4
       rect:
         serializedVersion: 2
-        x: 144
+        x: 128
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,20 +195,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bb55d89540cc835459c2014c49e8da33
-      internalID: -740168650
+      spriteID: d2d5673c8237e434fbbe67d13b73bf65
+      internalID: -1500962151
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Droid02Death_4
+      name: laser_deactivate_Mod_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cf09f98f4e501f45922b2045b44d329
+      internalID: 303813591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: laser_deactivate_Mod_6
       rect:
         serializedVersion: 2
         x: 192
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -195,20 +237,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 29af48bdcdcbb8e46a2678fec7d86404
-      internalID: 1430759108
+      spriteID: cb907ce632d87d14ba45ece6c36ca2bc
+      internalID: 30596116
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Droid02Death_5
+      name: laser_deactivate_Mod_7
       rect:
         serializedVersion: 2
-        x: 240
+        x: 224
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -216,20 +258,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 801f9423f92d8934b86641df8df38218
-      internalID: 1378656600
+      spriteID: 2702d6f3f32b03f44b04a5a108f1d904
+      internalID: 136315777
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Droid02Death_6
+      name: laser_deactivate_Mod_8
       rect:
         serializedVersion: 2
-        x: 288
+        x: 256
         y: 0
-        width: 48
-        height: 48
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -237,113 +279,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0c33a4c160f586347aab93699af367f6
-      internalID: 795864508
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Droid02Death_7
-      rect:
-        serializedVersion: 2
-        x: 336
-        y: 0
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 43ea77bef5e21744882ac14ec5de7a6d
-      internalID: -979930217
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Droid02Death_8
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 0
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f3d6effc707d9df4c957314b9ee619cf
-      internalID: 1376153777
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Droid02Death_9
-      rect:
-        serializedVersion: 2
-        x: 432
-        y: 0
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a2d35905513f27246bb8831070febf4b
-      internalID: 1735137886
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Droid02Death_10
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 0
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9164a651a2b042c4d86cf23beffe2891
-      internalID: 1810833832
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Droid02Death_11
-      rect:
-        serializedVersion: 2
-        x: 528
-        y: 0
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ebc823f7c1325a348b3b13dc9df14a85
-      internalID: 1779843227
+      spriteID: d6c3d43beb1ad7e43adec85ca5f4be4a
+      internalID: 1149608978
       vertices: []
       indices: 
       edges: []
@@ -359,18 +296,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Droid02Death_0: -237357945
-      Droid02Death_1: 1463143152
-      Droid02Death_10: 1810833832
-      Droid02Death_11: 1779843227
-      Droid02Death_2: 302830776
-      Droid02Death_3: -740168650
-      Droid02Death_4: 1430759108
-      Droid02Death_5: 1378656600
-      Droid02Death_6: 795864508
-      Droid02Death_7: -979930217
-      Droid02Death_8: 1376153777
-      Droid02Death_9: 1735137886
+      laser_deactivate_Mod_0: 1148225546
+      laser_deactivate_Mod_1: 1022375973
+      laser_deactivate_Mod_2: 1357425593
+      laser_deactivate_Mod_3: -2117874955
+      laser_deactivate_Mod_4: -1500962151
+      laser_deactivate_Mod_5: 303813591
+      laser_deactivate_Mod_6: 30596116
+      laser_deactivate_Mod_7: 136315777
+      laser_deactivate_Mod_8: 1149608978
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

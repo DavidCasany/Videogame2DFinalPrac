@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerControllerScript : MonoBehaviour
 {
@@ -19,23 +21,21 @@ public class PlayerControllerScript : MonoBehaviour
     public float timeToDetach = 0.5f;
     private float wallDetachTimer;
 
-    [Header("Habilitat de Llan�ament (W)")]
+    [Header("Habilitat de Llançament (W)")]
     public GameObject flexaPare;
     public float forçaLlançament = 25f;
     public float duradaApuntat = 1f;
 
+    [Header("Combat")]
+    public bool estaFentDobleSalt = false;
+
+    [Header("Animacions Extres")]
     public float duradaAnimacioDash = 0.4f;
     private float dashAnimTimer = 0f;
-
     public float duradaAnimacioLanding = 0.15f;
     private float landingAnimTimer = 0f;
-    private bool wasGrounded = true;
 
-    private float apuntatTimer;
-    private bool estaApuntant = false;
-    private bool habilitatUsadaAire = false;
-
-    [Header("Configuraci� Salt")]
+    [Header("Configuració Salt")]
     public float jumpForceY = 13f;
     public float jumpForceX = 4f;
     public int maxJumps = 2;
@@ -48,7 +48,7 @@ public class PlayerControllerScript : MonoBehaviour
     public LayerMask wallLayer;
     public float checkRadius = 0.2f;
 
-    // Internes
+    // Variables internes de moviment i input
     private Rigidbody2D rb;
     private Camera cam;
     private Animator ar;
@@ -58,11 +58,16 @@ public class PlayerControllerScript : MonoBehaviour
     private bool isWallSliding;
     private bool facingRight = true;
     private float currentSpeed;
-
+    private bool wasGrounded = true;
     private bool jumpRequested = false;
 
-    // NOU CONTROLS: Variable per saber si els controls estan actius
+    // Variables de control d'estat
+    private float apuntatTimer;
+    private bool estaApuntant = false;
+    private bool habilitatUsadaAire = false;
     private bool controlsActius = true;
+    private bool estaMort = false;
+    private bool estaFerit = false;
 
     void Start()
     {
@@ -78,8 +83,7 @@ public class PlayerControllerScript : MonoBehaviour
 
     void Update()
     {
-        // NOU CONTROLS: Nom�s llegim el teclat si els controls estan actius
-        if (controlsActius)
+        if (controlsActius && !estaMort)
         {
             moveInput.x = Input.GetAxisRaw("Horizontal");
             moveInput.y = Input.GetAxisRaw("Vertical");
@@ -91,11 +95,16 @@ public class PlayerControllerScript : MonoBehaviour
         }
         else
         {
-            // Si estan desactivats, forcem que no hi hagi input de moviment
             moveInput = Vector2.zero;
         }
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+        Collider2D colliderTerra = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+
+        // Només és terra de veritat si hem tocat alguna cosa I AQUESTA COSA NO ÉS UN ENEMIC (ni un obstacle)
+        bool tocaTerraFisica = (colliderTerra != null && !colliderTerra.CompareTag("Enemic") && !colliderTerra.CompareTag("Obstacle"));
+
+        isGrounded = tocaTerraFisica && rb.velocity.y <= 0.1f;
+
         isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, checkRadius, wallLayer);
 
         if (dashAnimTimer > 0) dashAnimTimer -= Time.deltaTime;
@@ -106,21 +115,25 @@ public class PlayerControllerScript : MonoBehaviour
             landingAnimTimer = duradaAnimacioLanding;
         }
 
+        // --- MILLORA 2: RESET DEL DOBLE SALT CONTROLAT ---
         if (isGrounded)
         {
             jumpsLeft = maxJumps;
             habilitatUsadaAire = false;
+
+            // Si tocàvem terra i teníem el doble salt actiu, el desactivem i avisem
+            if (estaFentDobleSalt)
+            {
+                estaFentDobleSalt = false;
+                Debug.Log("Terra tocada (isGrounded = true) -> Doble salt DESACTIVAT.");
+            }
         }
 
         if (estaApuntant)
         {
-            // NOU CONTROLS: Nom�s deixem moure la fletxa si els controls estan actius
-            if (controlsActius)
-            {
-                ActualitzarApuntat();
-            }
+            if (controlsActius) ActualitzarApuntat();
         }
-        else
+        else if (!estaMort && !estaFerit)
         {
             HandleWallLogic();
 
@@ -135,7 +148,6 @@ public class PlayerControllerScript : MonoBehaviour
                 else if (moveInput.x < 0 && facingRight) Flip();
             }
 
-            // NOU CONTROLS: Condicionem el salt a tenir els controls actius
             if (controlsActius && Input.GetKeyDown(KeyCode.Space))
             {
                 jumpRequested = true;
@@ -143,15 +155,14 @@ public class PlayerControllerScript : MonoBehaviour
         }
 
         ActualitzarAnimacions();
-
         wasGrounded = isGrounded;
     }
 
     void FixedUpdate()
     {
-        if (estaApuntant)
+        if (estaApuntant || estaMort || estaFerit)
         {
-            rb.velocity = Vector2.zero;
+            if (estaApuntant) rb.velocity = Vector2.zero;
             jumpRequested = false;
             return;
         }
@@ -169,33 +180,70 @@ public class PlayerControllerScript : MonoBehaviour
 
     private void ActualitzarAnimacions()
     {
-        if (estaApuntant || dashAnimTimer > 0)
+        if (estaMort) ar.SetInteger("State", 6);
+        else if (estaFerit) ar.SetInteger("State", 5);
+        else if (estaApuntant || dashAnimTimer > 0) ar.SetInteger("State", 4);
+        else if (isWallSliding) ar.SetInteger("State", 3);
+        else if (landingAnimTimer > 0 && isGrounded) ar.SetInteger("State", 7);
+        else if (!isGrounded) ar.SetInteger("State", 2);
+        else if (Mathf.Abs(moveInput.x) > 0) ar.SetInteger("State", 1);
+        else ar.SetInteger("State", 0);
+    }
+
+    public void Morir()
+    {
+        if (estaMort) return;
+        estaMort = true;
+        DesactivarControls();
+        rb.velocity = Vector2.zero;
+        rb.simulated = false;
+        Invoke("GameOverSequence", 2f);
+    }
+
+    private void GameOverSequence()
+    {
+        SceneManager.LoadScene(3);
+    }
+
+    public void ActivarEstatFerit(bool estat)
+    {
+        estaFerit = estat;
+        if (estat) DesactivarControls();
+        else ActivarControls();
+    }
+
+    public void ActivarControls()
+    {
+        controlsActius = true;
+    }
+
+    public void DesactivarControls()
+    {
+        controlsActius = false;
+        moveInput = Vector2.zero;
+        jumpRequested = false;
+
+        if (estaApuntant)
         {
-            ar.SetInteger("State", 4);
-        }
-        else if (isWallSliding)
-        {
-            ar.SetInteger("State", 3);
-        }
-        else if (landingAnimTimer > 0 && isGrounded)
-        {
-            ar.SetInteger("State", 5);
-        }
-        else if (!isGrounded)
-        {
-            ar.SetInteger("State", 2);
-        }
-        else if (Mathf.Abs(moveInput.x) > 0)
-        {
-            ar.SetInteger("State", 1);
-        }
-        else
-        {
-            ar.SetInteger("State", 0);
+            estaApuntant = false;
+            Time.timeScale = 1f;
+            Time.fixedDeltaTime = 0.02f;
+            if (flexaPare != null) flexaPare.SetActive(false);
         }
     }
 
-    // --- M�TODES DE L'HABILITAT W ---
+    public void ResetSaltsIAbilitat()
+    {
+        jumpsLeft = maxJumps;
+        habilitatUsadaAire = false;
+        estaApuntant = false;
+        estaFentDobleSalt = false; // Assegurem apagar el doble salt al fer reset
+        dashAnimTimer = 0f;
+        landingAnimTimer = 0f;
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
+        if (flexaPare != null) flexaPare.SetActive(false);
+    }
 
     void IniciarApuntat()
     {
@@ -203,54 +251,41 @@ public class PlayerControllerScript : MonoBehaviour
         habilitatUsadaAire = true;
         apuntatTimer = duradaApuntat;
         dashAnimTimer = 0f;
-
         Time.timeScale = 0.1f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
-
         if (flexaPare != null) flexaPare.SetActive(true);
     }
 
     void ActualitzarApuntat()
     {
         apuntatTimer -= Time.unscaledDeltaTime;
-
         Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
         Vector2 direccio = ((Vector2)mousePos - (Vector2)transform.position).normalized;
-
         float angle = Mathf.Atan2(direccio.y, direccio.x) * Mathf.Rad2Deg;
 
         if (flexaPare != null)
         {
             flexaPare.transform.rotation = Quaternion.Euler(0, 0, angle + 180f);
-
             Vector3 fletxaScale = flexaPare.transform.localScale;
             fletxaScale.x = transform.localScale.x > 0 ? 1 : -1;
             fletxaScale.y = transform.localScale.x > 0 ? 1 : -1;
             flexaPare.transform.localScale = fletxaScale;
         }
 
-        if (apuntatTimer <= 0)
-        {
-            ExecutarLlançament(direccio);
-        }
+        if (apuntatTimer <= 0) ExecutarLlançament(direccio);
     }
 
     void ExecutarLlançament(Vector2 dir)
     {
         estaApuntant = false;
         if (flexaPare != null) flexaPare.SetActive(false);
-
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
-
         rb.velocity = dir * forçaLlançament;
         currentSpeed = rb.velocity.x;
-
         dashAnimTimer = duradaAnimacioDash;
     }
-
-    // --- M�TODES DE MOVIMENT ---
 
     private void ApplyGroundMovement()
     {
@@ -285,7 +320,6 @@ public class PlayerControllerScript : MonoBehaviour
             bool pushingAway = (facingRight && moveInput.x < 0) || (!facingRight && moveInput.x > 0);
             if (pushingAway) wallDetachTimer -= Time.deltaTime;
             else wallDetachTimer = timeToDetach;
-
             isWallSliding = (wallDetachTimer > 0);
         }
         else
@@ -315,6 +349,13 @@ public class PlayerControllerScript : MonoBehaviour
 
         if (isGrounded || jumpsLeft > 0)
         {
+            // --- MILLORA 3: ACTIVACIÓ DEL DOBLE SALT I DEBUG ---
+            if (!isGrounded)
+            {
+                estaFentDobleSalt = true;
+                Debug.Log("DOBLE SALT ACTIVAT! Llest per trepitjar l'enemic.");
+            }
+
             jumpsLeft--;
             float boostX = moveInput.x * jumpForceX;
             rb.velocity = new Vector2(rb.velocity.x + boostX, jumpForceY);
@@ -329,38 +370,10 @@ public class PlayerControllerScript : MonoBehaviour
         transform.localScale = scaler;
     }
 
-    public void ResetSaltsIAbilitat()
+    public void AplicarRebotAlMatarEnemic(float forcaRebot)
     {
-        jumpsLeft = maxJumps;
-        habilitatUsadaAire = false;
-        estaApuntant = false;
-        dashAnimTimer = 0f;
-        landingAnimTimer = 0f;
-        Time.timeScale = 1f;
-        Time.fixedDeltaTime = 0.02f;
-        if (flexaPare != null) flexaPare.SetActive(false);
+        rb.velocity = new Vector2(rb.velocity.x, forcaRebot);
+        estaFentDobleSalt = false;
+        ResetSaltsIAbilitat();
     }
-
-    // --- NOU CONTROLS: FUNCIONS P�BLIQUES ---
-
-    public void ActivarControls()
-    {
-        controlsActius = true;
-    }
-
-    public void DesactivarControls()
-    {
-        controlsActius = false;
-        moveInput = Vector2.zero; // Aturem l'intent de moviment
-        jumpRequested = false;    // Cancel�lem salts pendents
-
-        // Si desactives els controls mentre el jugador estava apuntant (temps alentit), ho cancel�lem
-        if (estaApuntant)
-        {
-            estaApuntant = false;
-            Time.timeScale = 1f;
-            Time.fixedDeltaTime = 0.02f;
-            if (flexaPare != null) flexaPare.SetActive(false);
-        }
-    }
-} 
+}

@@ -15,6 +15,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Tutorial.unity
     guid: 5ad9d4cac3eff93428d7102fed367283
   - enabled: 1
+    path: Assets/Scenes/Room1.unity
+    guid: dc68e770a1361814fad19ca21ee3a044
+  - enabled: 1
+    path: Assets/Scenes/BossBatle.unity
+    guid: 628620713d7d5c94685185face20f3fb
+  - enabled: 1
     path: Assets/Scenes/OptionsScreen.unity
     guid: 87a21127ccf038f429af198b49239d0c
   - enabled: 1
