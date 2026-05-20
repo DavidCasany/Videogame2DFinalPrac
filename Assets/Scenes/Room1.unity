@@ -657,7 +657,7 @@ GameObject:
   - component: {fileID: 155067816}
   m_Layer: 0
   m_Name: saw_idle_0 (5)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3178,11 +3178,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 580111125952238859, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 16.758581
+      value: 13.795664
       objectReference: {fileID: 0}
     - target: {fileID: 580111125952238859, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.0859
+      value: 1.6118
       objectReference: {fileID: 0}
     - target: {fileID: 1338211924342381204, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3190,7 +3190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1338211924342381204, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.75
+      value: -5.76
       objectReference: {fileID: 0}
     - target: {fileID: 1338211924342381204, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3243,6 +3243,10 @@ PrefabInstance:
     - target: {fileID: 5899661337651422255, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8961676338076230132, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.93
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3424,7 +3428,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2865514697138550213, guid: 6ef5434934f4e1c418572a421510f7fe, type: 3}
       propertyPath: m_TagString
-      value: Obstacle
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 3047796983871396258, guid: 6ef5434934f4e1c418572a421510f7fe, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4675,7 +4679,7 @@ Transform:
   m_GameObject: {fileID: 859114851}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.21, y: 4.57, z: 0}
+  m_LocalPosition: {x: -23.99, y: 8.21, z: 0}
   m_LocalScale: {x: 2.249841, y: 2.2498412, z: 2.2498412}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4696,7 +4700,7 @@ MonoBehaviour:
   velocitatDeambular: 1.5
   velocitatPersecucio: 3.5
   radiDeambular: 4
-  tempsEsperaWander: 1.5
+  tempsEsperaWander: 1.7
   tempsMaximBloqueig: 3
   radiVisio: 6
   radiAtac: 1.5
@@ -6593,21 +6597,21 @@ CompositeCollider2D:
       - X: -310000000
         Y: -110000000
     - - X: -190000000
-        Y: -60000000
+        Y: -50000000
+      - X: -200000000
+        Y: -50000000
       - X: -200000000
         Y: -60000000
-      - X: -200000000
-        Y: -70000000
       - X: -190000000
-        Y: -70000000
+        Y: -60000000
     - - X: -270000000
-        Y: -60000000
+        Y: -50000000
+      - X: -280000000
+        Y: -50000000
       - X: -280000000
         Y: -60000000
-      - X: -280000000
-        Y: -70000000
       - X: -270000000
-        Y: -70000000
+        Y: -60000000
     - - X: -190000000
         Y: -90000000
       - X: -200000000
@@ -6798,7 +6802,15 @@ CompositeCollider2D:
       - {x: -39.999973, y: 1}
       - {x: -39, y: 0.9999706}
       - {x: -38.999973, y: -15}
-    - - {x: 17, y: -12.99997}
+    - - {x: 37, y: -12.99997}
+      - {x: 19, y: -12.99997}
+      - {x: 19.000029, y: -11}
+      - {x: 20, y: -10.99997}
+      - {x: 19.999992, y: -9.031241}
+      - {x: 19.968739, y: -9}
+      - {x: 17.031242, y: -9.000008}
+      - {x: 17, y: -9.0312605}
+      - {x: 16.999971, y: -13}
       - {x: 15, y: -12.99997}
       - {x: 14.999992, y: -4.0312424}
       - {x: 14.9687395, y: -4}
@@ -7047,14 +7059,6 @@ CompositeCollider2D:
       - {x: 35.000015, y: -2.5937576}
       - {x: 35.812508, y: -3}
       - {x: 37, y: -3.0000293}
-      - {x: 36.999973, y: -13}
-      - {x: 19, y: -12.99997}
-      - {x: 19.000029, y: -11}
-      - {x: 20, y: -10.99997}
-      - {x: 19.999992, y: -9.031241}
-      - {x: 19.968739, y: -9}
-      - {x: 17.031242, y: -9.000008}
-      - {x: 17, y: -9.0312605}
     - - {x: -40.00003, y: 8}
       - {x: -40.00003, y: 9}
       - {x: -41, y: 8.99997}
@@ -7077,14 +7081,14 @@ CompositeCollider2D:
       - {x: -31.968756, y: -4.0000076}
       - {x: -32, y: -4.031261}
       - {x: -31.999971, y: -11}
-    - - {x: -27.000029, y: -7}
-      - {x: -27.000029, y: -6}
-      - {x: -28, y: -6.000029}
-      - {x: -27.999971, y: -7}
-    - - {x: -19.000029, y: -7}
-      - {x: -19.000029, y: -6}
-      - {x: -20, y: -6.000029}
-      - {x: -19.999971, y: -7}
+    - - {x: -19.000029, y: -6}
+      - {x: -19.000029, y: -5}
+      - {x: -20, y: -5.000029}
+      - {x: -19.999971, y: -6}
+    - - {x: -27.000029, y: -6}
+      - {x: -27.000029, y: -5}
+      - {x: -28, y: -5.000029}
+      - {x: -27.999971, y: -6}
     - - {x: -19.000029, y: -10}
       - {x: -19.000029, y: -9}
       - {x: -20, y: -9.00003}
@@ -9284,26 +9288,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -28, y: -7, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 8
-      m_TileSpriteIndex: 1
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: -20, y: -7, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 8
-      m_TileSpriteIndex: 1
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: -15, y: -7, z: 0}
     second:
       serializedVersion: 2
@@ -9709,6 +9693,26 @@ Tilemap:
       serializedVersion: 2
       m_TileIndex: 46
       m_TileSpriteIndex: 46
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -28, y: -6, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 8
+      m_TileSpriteIndex: 1
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1073741825
+  - first: {x: -20, y: -6, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 8
+      m_TileSpriteIndex: 1
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -15807,6 +15811,56 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5894fd695aab1f4d80a867c1a4d1f0c, type: 3}
+--- !u!1 &1265769424 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8756304663739326635, guid: 0462f62a14f0c614e8546a2df08db682, type: 3}
+  m_PrefabInstance: {fileID: 1844569523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &1265769429
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1265769424}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.021504283}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 0.375}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.1398106}
+  m_EdgeRadius: 0
 --- !u!1 &1268645821 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7273704054917763044, guid: 296798259bd7e8541ab46d903198d563, type: 3}
@@ -35916,7 +35970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7627545161167799032, guid: c5894fd695aab1f4d80a867c1a4d1f0c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.58
+      value: -7.59
       objectReference: {fileID: 0}
     - target: {fileID: 7627545161167799032, guid: c5894fd695aab1f4d80a867c1a4d1f0c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -36144,7 +36198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8292197699371560960, guid: 1bb8f297ab5e32948a57fe4f9b9adccb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.11
+      value: -7.09
       objectReference: {fileID: 0}
     - target: {fileID: 8292197699371560960, guid: 1bb8f297ab5e32948a57fe4f9b9adccb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -36493,7 +36547,7 @@ GameObject:
   - component: {fileID: 1502663594}
   m_Layer: 0
   m_Name: saw_idle_0 (6)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36647,11 +36701,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 580111125952238859, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 16.758581
+      value: 13.584506
       objectReference: {fileID: 0}
     - target: {fileID: 580111125952238859, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.0859
+      value: 2.5937
       objectReference: {fileID: 0}
     - target: {fileID: 1338211924342381204, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36715,7 +36769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5899661337651422255, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.77
+      value: 0.26
       objectReference: {fileID: 0}
     - target: {fileID: 5899661337651422255, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -36962,6 +37016,10 @@ PrefabInstance:
     - target: {fileID: 7865371421003800096, guid: 7661006d3346c5c4b9e8e028eb2d0e83, type: 3}
       propertyPath: m_LocalPosition.y
       value: -5.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396727893037123817, guid: 7661006d3346c5c4b9e8e028eb2d0e83, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -38869,7 +38927,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1338211924342381204, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.36
+      value: -6.3400006
       objectReference: {fileID: 0}
     - target: {fileID: 1338211924342381204, guid: 4c7af75beceff434fac72a2375b8381a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -38938,11 +38996,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 140248813905720557, guid: 344a5bc9fbefd174a9ae63c5dd95ed92, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.83
+      value: -18.73
       objectReference: {fileID: 0}
     - target: {fileID: 140248813905720557, guid: 344a5bc9fbefd174a9ae63c5dd95ed92, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.93
+      value: 8.24
       objectReference: {fileID: 0}
     - target: {fileID: 140248813905720557, guid: 344a5bc9fbefd174a9ae63c5dd95ed92, type: 3}
       propertyPath: m_LocalPosition.z
@@ -39019,7 +39077,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5701648389047563485, guid: 0462f62a14f0c614e8546a2df08db682, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.42
+      value: -0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8290391273544463519, guid: 0462f62a14f0c614e8546a2df08db682, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39084,7 +39142,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8756304663739326635, guid: 0462f62a14f0c614e8546a2df08db682, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1265769429}
   m_SourcePrefab: {fileID: 100100000, guid: 0462f62a14f0c614e8546a2df08db682, type: 3}
 --- !u!4 &1856555506 stripped
 Transform:
@@ -40398,6 +40459,10 @@ PrefabInstance:
       value: SawBlade
       objectReference: {fileID: 0}
     - target: {fileID: 6408857267282728001, guid: 7661006d3346c5c4b9e8e028eb2d0e83, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
+    - target: {fileID: 8396727893037123817, guid: 7661006d3346c5c4b9e8e028eb2d0e83, type: 3}
       propertyPath: m_TagString
       value: Obstacle
       objectReference: {fileID: 0}
