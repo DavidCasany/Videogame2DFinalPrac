@@ -37,26 +37,24 @@ public class TutorialRoomManagerScript : MonoBehaviour
 
     void Update()
     {
-        // 1. VIGILEM EL FINAL DEL TUTORIAL: Si l'esdeveniment està actiu però l'objecte
-        // s'ha desactivat (perquè has agafat el consumible), obrim les barreres!
+
         if (eventTutorialActivat && finalTutorial != null && !finalTutorial.activeSelf)
         {
             SetPortesEstat(false);
-            eventTutorialActivat = false; // Ho posem a fals perquè no ho repeteixi cada frame
+            eventTutorialActivat = false; 
             Debug.Log("Tutorial finalitzat al 100%! S'obren les barreres.");
         }
 
-        // 2. VIGILEM ELS OBJECTES: Només comprovem si la sala no està completada encara
+        
         if (!salaCompletada && jugadorDins)
         {
             if (EstanTotsAgafats())
             {
-                // AQUÍ ESTÀ LA MÀGIA: Completem la sala definitivament en el mateix
-                // instant en què agafem l'últim objecte.
+            
                 salaCompletada = true;
                 CompletarSalaDefinitivament();
 
-                // Activem l'objecte del tutorial final
+             
                 if (finalTutorial != null)
                 {
                     finalTutorial.SetActive(true);
@@ -80,8 +78,7 @@ public class TutorialRoomManagerScript : MonoBehaviour
             PlayerRespawnScript respawnScript = other.GetComponent<PlayerRespawnScript>();
             if (respawnScript != null)
             {
-                // Avís: Si el teu PlayerRespawn demana estrictament un RoomManagerScript,
-                // potser has de canviar "MonoBehaviour" a dalt per "RoomManagerScript"
+ 
                 respawnScript.salaActual = this.GetComponent<RoomManagerScript>();
                 if (puntDeSpawn != null) respawnScript.SetNewCheckpoint(puntDeSpawn.position);
             }
@@ -100,8 +97,7 @@ public class TutorialRoomManagerScript : MonoBehaviour
         {
             jugadorDins = false;
 
-            // Com que ara hem mogut la comprovació de "completar sala" a l'Update,
-            // aquí ja no cal que hi fem absolutament res en sortir! El codi queda molt més net.
+        
         }
     }
 
@@ -117,8 +113,7 @@ public class TutorialRoomManagerScript : MonoBehaviour
 
     public void ReiniciarSala()
     {
-        // Com que la sala ara es completa a l'agafar els objectes, 
-        // aquest return salvarà el progrés i no els reactivarà!
+
         if (salaCompletada)
         {
             return;

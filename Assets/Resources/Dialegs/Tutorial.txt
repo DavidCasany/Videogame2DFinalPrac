@@ -1,0 +1,9 @@
+#FAILED# experiment, I have #FREED# you from this cell.
+Do not mistake it for kindness. I need you to retrieve something for me.
+You must locate and secure all the #ACCESS CARDS# scattered across this facility.
+Use the #A# and #D# keys to move.
+Press #SPACE# to leap over the obstacles in your path, press #W# to #DOUBLE JUMP#.
+If you fail, press #R# to #RESTART# the room from your last checkpoint.
+Collect every card and bring them straight back to me.
+Succeed, and you will earn the #REWARD# you so desperately #NEED#.
+Do not keep me waiting. You must be #FAST#.

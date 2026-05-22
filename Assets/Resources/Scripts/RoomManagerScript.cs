@@ -1,11 +1,13 @@
 using UnityEngine;
 
+
 public class RoomManagerScript : MonoBehaviour
 {
     [Header("Configuració de la Sala")]
     public string nomDeLaSala = "Sala 1";
     public Transform puntDeSpawn;
     public Transform puntDeCamara;
+    public bool esSalaBoss = false;
 
     [Header("Portes i Sortides")]
     public GameObject[] portesDeLaSala;
@@ -14,18 +16,14 @@ public class RoomManagerScript : MonoBehaviour
     [Header("Objectes Activables")]
     public GameObject[] objectesDeLaSala;
 
-    // Variables d'estat
-    private bool salaCompletada = false; // Només es fa true al SORTIR de la sala sa i estalvi
+    private bool salaCompletada = false;
     private bool jugadorDins = false;
     private bool portesObertesActualment = false;
-
     private Camera camaraPrincipal;
 
     void Start()
     {
         camaraPrincipal = Camera.main;
-
-        // Inicialment les portes estan obertes fins que el jugador hi entra
         SetPortesEstat(false);
     }
 
@@ -33,12 +31,10 @@ public class RoomManagerScript : MonoBehaviour
     {
         if (salaCompletada) return;
 
-        // Si el jugador és dins, mirem si ha agafat tots els objectes
         if (jugadorDins)
         {
             if (EstanTotsAgafats() && !portesObertesActualment)
             {
-                // OBRIM LES PORTES per poder passar, però encara NO completem la sala definitivament
                 SetPortesEstat(false);
                 portesObertesActualment = true;
                 Debug.Log("Objectes recollits! Portes obertes, surt de la sala per confirmar.");
@@ -52,11 +48,9 @@ public class RoomManagerScript : MonoBehaviour
         {
             jugadorDins = true;
 
-            // 1. Movem la càmera
             if (puntDeCamara != null && camaraPrincipal != null)
                 camaraPrincipal.transform.position = new Vector3(puntDeCamara.position.x, puntDeCamara.position.y, -10f);
 
-            // 2. Registrem la sala al jugador i actualitzem el Respawn
             PlayerRespawnScript respawnScript = other.GetComponent<PlayerRespawnScript>();
             if (respawnScript != null)
             {
@@ -64,12 +58,10 @@ public class RoomManagerScript : MonoBehaviour
                 if (puntDeSpawn != null) respawnScript.SetNewCheckpoint(puntDeSpawn.position);
             }
 
-            // 3. Tancar portes NOMÉS si la sala NO està completada
             if (tancarEnEntrar && !salaCompletada)
             {
                 SetPortesEstat(true);
                 portesObertesActualment = false;
-                Debug.Log("Portes tancades. Atrapa els objectes!");
             }
         }
     }
@@ -79,17 +71,13 @@ public class RoomManagerScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             jugadorDins = false;
-
-            // Busquem l'script del jugador per veure el seu estat
             PlayerRespawnScript respawnScript = other.GetComponent<PlayerRespawnScript>();
 
-            // SI ESTÀ MORT (per haver tocat punxes i quedar-se congelat), IGNOREM LA SORTIDA
             if (respawnScript != null && respawnScript.estaMort)
             {
                 return;
             }
 
-            // Si està viu, ha sortit caminant per la porta. Verifiquem els objectes:
             if (!salaCompletada && EstanTotsAgafats())
             {
                 CompletarSalaDefinitivament();
@@ -100,28 +88,22 @@ public class RoomManagerScript : MonoBehaviour
     private void CompletarSalaDefinitivament()
     {
         salaCompletada = true;
-        Debug.Log("<color=green>SALA COMPLETADA DEFINITIVAMENT: </color>" + nomDeLaSala);
-
-        // Ens assegurem que les portes queden obertes per sempre
         SetPortesEstat(false);
 
-        // AVISAR AL GAME MANAGER QUE HEM FET UNA SALA MÉS
         if (GameManagerScript.instance != null)
         {
             GameManagerScript.instance.ComprovarProgresJoc();
         }
     }
 
-    // --- FUNCIÓ DE REINICI DE LA SALA ---
+
     public void ReiniciarSala()
     {
-        // Si la sala ja s'havia guardat al sortir, no la toquem. Reapareixeràs aquí però tot seguirà obert.
-        if (salaCompletada)
+        if (salaCompletada || esSalaBoss)
         {
             return;
         }
 
-        // Si el jugador mor abans de sortir, reiniciem ELS OBJECTES
         if (objectesDeLaSala != null)
         {
             foreach (GameObject obj in objectesDeLaSala)
@@ -130,17 +112,14 @@ public class RoomManagerScript : MonoBehaviour
             }
         }
 
-        // Tornem a tancar les portes per al nou intent
         if (tancarEnEntrar)
         {
             SetPortesEstat(true);
             portesObertesActualment = false;
         }
-
-        Debug.Log("Sala " + nomDeLaSala + " reiniciada!");
     }
 
-    // --- MODIFICACIÓ: Funció auxiliar per canviar l'animació i col·lisions de les portes ---
+
     private void SetPortesEstat(bool estat)
     {
         if (portesDeLaSala != null)
@@ -149,19 +128,11 @@ public class RoomManagerScript : MonoBehaviour
             {
                 if (porta != null)
                 {
-                    // 1. Canviem l'estat de l'animador
                     Animator ar = porta.GetComponent<Animator>();
-                    if (ar != null)
-                    {
-                        ar.SetBool("BarrierState", estat);
-                    }
+                    if (ar != null) ar.SetBool("BarrierState", estat);
 
-                    // 2. Activem/Desactivem el collider per permetre o bloquejar el pas
                     Collider2D col = porta.GetComponent<Collider2D>();
-                    if (col != null)
-                    {
-                        col.enabled = estat;
-                    }
+                    if (col != null) col.enabled = estat;
                 }
             }
         }
@@ -178,7 +149,6 @@ public class RoomManagerScript : MonoBehaviour
         return true;
     }
 
-    // Permet al Game Manager llegir si la sala està completada
     public bool GetSalaCompletada()
     {
         return salaCompletada;

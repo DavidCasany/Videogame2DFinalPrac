@@ -61,7 +61,7 @@ public class DialegTextScript : MonoBehaviour
 
         textComponent.text = "";
 
-        // NOU: Desactiva l'objecte automàticament quan s'acaben les línies
+      
         gameObject.SetActive(false);
     }
 }

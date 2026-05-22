@@ -24,11 +24,10 @@ public class KamikazeScript : MonoBehaviour
     [Tooltip("El temps que es mostra l'animació de rebre dany abans d'explotar visualment")]
     public float tempsAnimacioDany = 0.3f;
 
-    // Variables internes
     private Transform jugador;
     private Animator ar;
     private Rigidbody2D rb;
-    private Collider2D col; // NOU: Guardem el collider
+    private Collider2D col;
     private Vector3 puntObjectiu;
     private Vector3 posicioInicial;
     private float temporitzadorEspera = 0f;
@@ -44,7 +43,7 @@ public class KamikazeScript : MonoBehaviour
     {
         ar = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        col = GetComponent<Collider2D>(); // Inicialitzem el collider
+        col = GetComponent<Collider2D>();
         posicioInicial = transform.position;
 
         GameObject objJugador = GameObject.FindGameObjectWithTag("Player");
@@ -131,7 +130,6 @@ public class KamikazeScript : MonoBehaviour
         rb.velocity = Vector2.zero;
         CanviarAnimacio(2);
 
-        // NOU: Desactivem el collider instantàniament quan entra en mode compte enrere
         if (col != null) col.enabled = false;
 
         temporitzadorAtac += Time.deltaTime;
@@ -165,7 +163,6 @@ public class KamikazeScript : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
 
-        // Aquí també utilitzem el collider guardat per seguretat
         if (col != null) col.enabled = false;
 
         CanviarAnimacio(3);
@@ -180,6 +177,13 @@ public class KamikazeScript : MonoBehaviour
         {
             Instantiate(explosio, transform.position, Quaternion.identity);
         }
+
+        BossManagerScript boss = FindObjectOfType<BossManagerScript>();
+        if (boss != null)
+        {
+            boss.NotificarEnemicDestruit();
+        }
+
         Destroy(gameObject);
     }
 

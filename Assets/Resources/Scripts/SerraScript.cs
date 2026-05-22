@@ -10,7 +10,7 @@ public class SerraScript : MonoBehaviour
     public Transform puntB;
     public float velocitat = 3f;
 
-    // Variables de control intern
+
     private Vector3 proximObjectiu;
     private Animator ar;
     private bool estaEnMarxa = true; 
@@ -19,7 +19,7 @@ public class SerraScript : MonoBehaviour
     {
         ar = GetComponent<Animator>();
 
-        // Sempre comencem enviant el paràmetre Idle (0)
+       
         if (ar != null)
         {
             ar.SetInteger("State", 0);
@@ -36,19 +36,14 @@ public class SerraScript : MonoBehaviour
 
     void Update()
     {
-        // 1. COMPROVACIÓ REALS DE L'ANIMACIÓ:
-        // Mirem si l'animació que està sonant ARA MATEIX a Unity es diu "Idle"
-        // (Assegura't que el bloc de l'animació a l'Animator es digui exactament "Idle")
+  
         bool animacioActualEsIdle = ar != null && ar.GetCurrentAnimatorStateInfo(0).IsName("Serra_idle");
 
-        // 2. CONDICIÓ DE MOVIMENT:
-        // Només es mou si NO és estàtica, la serra està en marxa i l'animació activa és Idle
         if (!esEstatica && estaEnMarxa && animacioActualEsIdle && puntA != null && puntB != null)
         {
             MoureSerra();
         }
-        // Si no es compleix (és estàtica, o l'animació és Engegar(2) o Aturar(1)), 
-        // el codi no farà res i la serra es quedarà completament quieta al seu lloc.
+  
     }
 
     private void MoureSerra()
@@ -68,7 +63,6 @@ public class SerraScript : MonoBehaviour
         }
     }
 
-    // --- FUNCIONS PÚBLIQUES D'ANIMACIÓ ---
 
     public void Parar()
     {
@@ -76,7 +70,7 @@ public class SerraScript : MonoBehaviour
         
         if (ar != null)
         {
-            ar.SetInteger("State", 1); // Estat 1: Parar (Aturarà el moviment immediatament)
+            ar.SetInteger("State", 1); 
         }
         
         Debug.Log("La serra s'ha aturat.");
@@ -88,7 +82,7 @@ public class SerraScript : MonoBehaviour
         
         if (ar != null)
         {
-            ar.SetInteger("State", 2); // Estat 2: Engegar
+            ar.SetInteger("State", 2); 
         }
         
         Debug.Log("La serra s'ha engegat.");

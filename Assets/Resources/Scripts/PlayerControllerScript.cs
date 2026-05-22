@@ -97,7 +97,7 @@ public class PlayerControllerScript : MonoBehaviour
 
         Collider2D colliderTerra = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
 
-        // Només és terra de veritat si hem tocat alguna cosa I AQUESTA COSA NO ÉS UN ENEMIC (ni un obstacle)
+        
         bool tocaTerraFisica = (colliderTerra != null && !colliderTerra.CompareTag("Enemic") && !colliderTerra.CompareTag("Obstacle"));
 
         isGrounded = tocaTerraFisica && rb.velocity.y <= 0.1f;
@@ -191,7 +191,8 @@ public class PlayerControllerScript : MonoBehaviour
 
     private void GameOverSequence()
     {
-        SceneManager.LoadScene(3);
+        int escenaActual = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(escenaActual);
     }
 
     public void ActivarEstatFerit(bool estat)

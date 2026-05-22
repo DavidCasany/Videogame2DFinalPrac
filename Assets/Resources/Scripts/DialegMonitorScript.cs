@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Necessari per al canvi d'escena final
+using UnityEngine.SceneManagement; 
 
 public class DialegMonitorScript : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class DialegMonitorScript : MonoBehaviour
     [Tooltip("Número d'escena a carregar quan es completen totes les sales")]
     public int indexEscenaFinal = 4;
 
-    // Variables de control intern
+
     private bool jugadorAProp = false;
     private bool llegintDialeg = false;
     private EnergiaControllerScript energia;
@@ -29,25 +29,22 @@ public class DialegMonitorScript : MonoBehaviour
 
     void Update()
     {
-        // Demanem permís al GameManager de forma constant
+   
         if (GameManagerScript.instance != null)
         {
             bool tePermis = GameManagerScript.instance.PotInteractuarMonitor();
 
-            // Mostrem la icona "E" només si el jugador és a prop, no està parlant i el GameManager dona permís
             if (iconaInteraccio != null)
             {
                 iconaInteraccio.SetActive(jugadorAProp && tePermis && !llegintDialeg);
             }
 
-            // Iniciem el diàleg només si el GameManager ho permet
             if (jugadorAProp && tePermis && !llegintDialeg && Input.GetKeyDown(KeyCode.E))
             {
                 ComencarInteraccio();
             }
         }
 
-        // 2. Detectem quan el diàleg s'acaba (el panel es desactiva sol pel DialegTextScript)
         if (llegintDialeg && panelText != null && !panelText.activeSelf)
         {
             FinalitzarInteraccio();
@@ -72,17 +69,17 @@ public class DialegMonitorScript : MonoBehaviour
         if (energia != null) energia.SetPausaEnergia(false);
         if (monitorAnimator != null) monitorAnimator.SetBool("ScreenRed", true);
 
-        // COMPROVACIÓ AMB EL GAME MANAGER
+      
         if (GameManagerScript.instance != null)
         {
-            // CAS A: S'han completat totes les sales del joc -> CANVI D'ESCENA
+            
             if (GameManagerScript.instance.EstanTotesLesSalesCompletades())
             {
                 Debug.Log("Joc completat! Carregant escena final...");
                 SceneManager.LoadScene(indexEscenaFinal);
-                return; // Sortim per evitar spawnejar la bateria
+                return; 
             }
-            // CAS B: Encara queden sales -> Entrega de bateria normal i consumim el permís
+          
             else
             {
                 SpawnejarBateria();

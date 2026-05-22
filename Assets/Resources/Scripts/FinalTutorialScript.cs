@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // NOU: Necessari per al canvi d'escena
+using UnityEngine.SceneManagement;
 
 public class FinalTutorialScript : MonoBehaviour
 {
@@ -12,13 +12,13 @@ public class FinalTutorialScript : MonoBehaviour
 
     [Header("Recompensa i Escena")]
     public GameObject consumiblePrefab;
-    public float yOffsetBateria = 2f; // Altura extra sobre el cap del jugador
-    public int indexEscenaSeguent = 3; // Escena número 3 segons Build Settings
+    public float yOffsetBateria = 2f; 
+    public int indexEscenaSeguent = 3; 
 
-    // Variables de control intern
+
     private bool jugadorAProp = false;
     private bool llegintDialeg = false;
-    private PlayerControllerScript playerScript; // Guardem la referència del jugador
+    private PlayerControllerScript playerScript;
 
     void OnEnable()
     {
@@ -31,7 +31,7 @@ public class FinalTutorialScript : MonoBehaviour
 
     void Update()
     {
-        // 1. Detectar quan el jugador prem la tecla E
+      
         if (jugadorAProp && !llegintDialeg && Input.GetKeyDown(KeyCode.E))
         {
             llegintDialeg = true;
@@ -40,19 +40,17 @@ public class FinalTutorialScript : MonoBehaviour
             if (panelText != null) panelText.SetActive(true);
             if (monitorAnimator != null) monitorAnimator.SetBool("ScreenRed", false);
 
-            // NOU: Bloquegem els controls del jugador al començar el diàleg
+           
             if (playerScript != null)
             {
                 playerScript.DesactivarControls();
             }
         }
 
-        // 2. Comprovar quan el panell de text es tanca sol (perquè el text ha acabat)
+       
         if (llegintDialeg && panelText != null && !panelText.activeSelf)
         {
-            llegintDialeg = false; // Evitem que aquest bloc s'executi repetidament
-
-            // NOU: Spawnegem la bateria sobre el jugador (mateixa X, Y + offset)
+            llegintDialeg = false; 
             if (consumiblePrefab != null && playerScript != null)
             {
                 Vector3 spawnPos = new Vector3(
@@ -65,7 +63,7 @@ public class FinalTutorialScript : MonoBehaviour
 
             if (monitorAnimator != null) monitorAnimator.SetBool("ScreenRed", true);
 
-            // NOU: Esperem 2 segons i canviem a l'escena 3
+           
             Invoke("FinalitzarEscenaTutorial", 2f);
         }
     }
@@ -80,7 +78,7 @@ public class FinalTutorialScript : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             jugadorAProp = true;
-            // Obtenim la referència del script del jugador per poder moure'l o desactivar-lo
+          
             playerScript = collision.GetComponent<PlayerControllerScript>();
         }
     }

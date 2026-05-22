@@ -17,18 +17,17 @@ public class PlataformaMobilScript : MonoBehaviour
     {
         BoxCollider2D[] colliders = GetComponents<BoxCollider2D>();
 
-        // Si tenim més d'un collider (el trigger i el sòlid), busquem el sòlid
+    
         if (colliders.Length > 1)
         {
             floor = colliders[0].isTrigger ? colliders[1] : colliders[0];
         }
         else
         {
-            // Si només en té un (perquè no és travessable), agafem aquest
+          
             floor = colliders[0];
         }
 
-        // Desvinculem els punts per seguretat
         if (puntA.parent == transform) puntA.SetParent(null);
         if (puntB.parent == transform) puntB.SetParent(null);
 
@@ -52,7 +51,7 @@ public class PlataformaMobilScript : MonoBehaviour
         }
     }
 
-    // --- LÒGICA PER MOURE EL JUGADOR AMB LA PLATAFORMA ---
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -69,17 +68,17 @@ public class PlataformaMobilScript : MonoBehaviour
         }
     }
 
-    // --- LÒGICA PER TRAVESSAR LA PLATAFORMA ---
+  
     void OnTriggerStay2D(Collider2D collision)
     {
-        // Si la plataforma no és travessable, ignorem completament aquesta funció
+     
         if (!esAtrabessable) return;
 
         if (collision.gameObject.CompareTag("Player"))
         {
             Rigidbody2D rbJugador = collision.gameObject.GetComponent<Rigidbody2D>();
 
-            // Si el jugador va cap amunt (saltant des de sota), apaguem la col·lisió sòlida
+         
             if (rbJugador.velocity.y > 0.0f)
             {
                 floor.enabled = false;
@@ -89,12 +88,12 @@ public class PlataformaMobilScript : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        // Si no és travessable, ignorem la funció
+
         if (!esAtrabessable) return;
 
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Quan el jugador surt del tot del trigger, tornem a encendre el terra sòlid
+      
             if (floor != null)
             {
                 floor.enabled = true;

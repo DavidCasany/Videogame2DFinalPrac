@@ -13,9 +13,9 @@ public class TerminalScript : MonoBehaviour
     [Tooltip("Què passa quan l'interruptor es DESACTIVA?")]
     public UnityEvent enDesactivar;
 
-    // Variables de control intern (Amagades de l'Inspector)
+
     private bool jugadorAProp = false;
-    private bool estaActivat = false; // Comença desactivat per defecte
+    private bool estaActivat = false;
 
     void Start()
     {

@@ -12,6 +12,12 @@ public class EnergiaControllerScript : MonoBehaviour
     public float tempsMaximEnergia = 60f;
     public float tempsAnimacioRecarrega = 1f;
 
+    [Header("Configuració Tutorial")]
+    public bool iniciarPausat = false;
+    public float duradaCinematica = 30f;
+    public bool evitarMortTutorial = false;
+    public float energiaMinimaTutorial = 2f;
+
     private float energiaActual;
     private bool isRecarregant = false;
     private bool pausaExterna = false;
@@ -19,15 +25,28 @@ public class EnergiaControllerScript : MonoBehaviour
     void Start()
     {
         energiaActual = tempsMaximEnergia;
+        pausaExterna = iniciarPausat;
         ActualitzarSpriteBarra();
+
+        if (iniciarPausat)
+        {
+            Invoke("ActivarBateria", duradaCinematica);
+        }
     }
 
     void Update()
     {
-        // Només gastem l'energia si NO estem enmig de l'animació de recàrrega
         if (energiaActual > 0 && !isRecarregant && !pausaExterna)
         {
-            energiaActual -= Time.deltaTime;
+            if (evitarMortTutorial && energiaActual <= energiaMinimaTutorial)
+            {
+                energiaActual = energiaMinimaTutorial;
+            }
+            else
+            {
+                energiaActual -= Time.deltaTime;
+            }
+
             ActualitzarSpriteBarra();
 
             if (energiaActual <= 0)
@@ -80,9 +99,6 @@ public class EnergiaControllerScript : MonoBehaviour
 
     void QuedarSenseEnergia()
     {
-        Debug.Log("Sense bateria! Has mort.");
-
-        // Intentem trobar el jugador (tant si l'script està al player com si està a la UI)
         PlayerControllerScript player = GetComponent<PlayerControllerScript>();
         if (player == null)
         {
@@ -91,17 +107,17 @@ public class EnergiaControllerScript : MonoBehaviour
 
         if (player != null)
         {
-            Debug.Log("Enviant ordre de morir al jugador...");
             player.Morir();
         }
-        else
-        {
-            Debug.LogError("ERROR: No s'ha trobat el PlayerControllerScript per executar la mort!");
-        }
     }
-   
+
     public void SetPausaEnergia(bool estat)
     {
         pausaExterna = estat;
+    }
+
+    void ActivarBateria()
+    {
+        SetPausaEnergia(false);
     }
 }

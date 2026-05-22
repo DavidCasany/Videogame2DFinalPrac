@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: 
-  m_Time: 53.31666666666661
+  m_Time: 29.2
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: e5565f85c4de4c8439041be2f775f0d5, type: 2}
@@ -835,6 +835,7 @@ MonoBehaviour:
     m_Objects:
     - {fileID: 8735454858773127393}
     - {fileID: -8802436098196352614}
+    - {fileID: 742109856951140532}
 --- !u!114 &-696711189443587794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -996,7 +997,7 @@ MonoBehaviour:
     m_Start: 2
     m_ClipIn: 0.016666666666666607
     m_Asset: {fileID: -431311467060687119}
-    m_Duration: 51.31666666666661
+    m_Duration: 27.000000000000007
     m_TimeScale: 1
     m_ParentTrack: {fileID: -313699243687369375}
     m_EaseInDuration: 0
@@ -1383,12 +1384,28 @@ MonoBehaviour:
   - {fileID: -9199136417364852151}
   - {fileID: 1201204045728039701}
   - {fileID: -2312445476821033841}
-  m_FixedDuration: 0
+  m_FixedDuration: 29.2
   m_EditorSettings:
     m_Framerate: 60
     m_ScenePreview: 1
-  m_DurationMode: 0
+  m_DurationMode: 1
   m_MarkerTrack: {fileID: -1581752085243379715}
+--- !u!114 &742109856951140532
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
+  m_Name: Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 28.383333333333333
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 0}
 --- !u!114 &1201204045728039701
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1414,7 +1431,7 @@ MonoBehaviour:
     m_Start: 4
     m_ClipIn: 0
     m_Asset: {fileID: -696711189443587794}
-    m_Duration: 48.31666666666667
+    m_Duration: 25.000000000000007
     m_TimeScale: 1
     m_ParentTrack: {fileID: 1201204045728039701}
     m_EaseInDuration: 0
@@ -1646,7 +1663,7 @@ MonoBehaviour:
     m_Start: 4
     m_ClipIn: 0
     m_Asset: {fileID: -3111438867364950719}
-    m_Duration: 49.31666666666661
+    m_Duration: 25.000000000000007
     m_TimeScale: 1
     m_ParentTrack: {fileID: 3074440352227851763}
     m_EaseInDuration: 0
